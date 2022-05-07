@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "checkJs": true,
+    "declaration": true,
+    "declarationDir": "types",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "strict": true,
+    "target": "esnext"
+  },
+  "include": [
+    "**/*.js"
+  ],
+  "exclude": [
+    "bin",
+    "benchmark",
+    "coverage",
+    "dist",
+    "docs",
+    "examples",
+    "node_modules",
+    "test",
+    "tmp"
+  ]
+}

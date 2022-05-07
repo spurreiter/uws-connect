@@ -1,0 +1,68 @@
+{
+  "name": "uws-connect",
+  "version": "1.0.0-0",
+  "description": "Use connect like middlewares with uWebSockets.js",
+  "keywords": [
+    "uws",
+    "uwebsocketsjs",
+    "websockets",
+    "connect",
+    "express",
+    "expressjs",
+    "fast",
+    "http-server",
+    "https-server",
+    "http",
+    "https",
+    "ws",
+    "websocket",
+    "performance",
+    "router"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spurreiter/uws-connect"
+  },
+  "license": "MIT",
+  "author": "spurreiter",
+  "type": "module",
+  "main": "src/index.js",
+  "types": "types",
+  "directories": {
+    "test": "test"
+  },
+  "files": [
+    "src",
+    "types"
+  ],
+  "scripts": {
+    "ci": "npm run lint && npm t && npm run types",
+    "dev": "nodemon src/server.js",
+    "lint": "eslint --ext .js --fix .",
+    "start": "node src/server.js",
+    "test": "c8 -r html -r text mocha",
+    "types": "rm -r types; tsc --emitDeclarationOnly true --noEmitOnError && cp src/*.d.ts types"
+  },
+  "mocha": {
+    "exit": true
+  },
+  "dependencies": {
+    "cookie": "^0.5.0",
+    "qs": "^6.10.3",
+    "uWebSockets.js": "git+https://github.com/uNetworking/uWebSockets.js.git#semver:^20.10.0"
+  },
+  "devDependencies": {
+    "@types/cookie": "^0.5.1",
+    "@types/node": "^16.11.35",
+    "c8": "^7.11.3",
+    "cors": "^2.8.5",
+    "eslint": "^8.15.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "mocha": "^10.0.0",
+    "serve-static": "^1.15.0",
+    "typescript": "^4.6.4"
+  }
+}
