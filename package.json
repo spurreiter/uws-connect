@@ -1,6 +1,6 @@
 {
   "name": "uws-connect",
-  "version": "1.0.0",
+  "version": "1.0.1-0",
   "description": "Use connect like middlewares with uWebSockets.js",
   "keywords": [
     "uws",
@@ -19,9 +19,13 @@
     "performance",
     "router"
   ],
+  "homepage": "https://github.com/spurreiter/uws-connect#readme",
+  "bugs": {
+    "url": "https://github.com/spurreiter/uws-connect/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/spurreiter/uws-connect"
+    "url": "git+https://github.com/spurreiter/uws-connect.git"
   },
   "license": "MIT",
   "author": "spurreiter",
@@ -53,16 +57,16 @@
   },
   "devDependencies": {
     "@types/cookie": "^0.5.1",
-    "@types/node": "^16.11.35",
+    "@types/node": "^16.11.36",
     "c8": "^7.11.3",
     "cors": "^2.8.5",
-    "eslint": "^8.15.0",
+    "eslint": "^8.16.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.2.0",
     "eslint-plugin-promise": "^6.0.0",
     "mocha": "^10.0.0",
     "serve-static": "^1.15.0",
-    "typescript": "^4.6.4"
+    "typescript": "^4.7.2"
   }
 }
