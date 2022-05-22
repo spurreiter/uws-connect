@@ -29,7 +29,7 @@ export function App (options) {
 
   if (isSilent) {
     // @ts-ignore
-    uWs._cfg('AAAAABBBBB') // keyCode = 655 + 1 (addon.cpp)
+    uWs._cfg('silent') // keyCode = 655 + 1 (addon.cpp)
   }
 
   this.listen = (...args) => {
