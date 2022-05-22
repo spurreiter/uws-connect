@@ -48,7 +48,11 @@ export class Request extends Readable {
    * request url
    */
   get url () {
-    return this._req.getUrl()
+    return this._url || this._req.getUrl()
+  }
+
+  set url (newUrl) {
+    this._url = newUrl
   }
 
   /**
