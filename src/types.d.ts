@@ -1,4 +1,4 @@
-import uWs from 'uWebSockets.js';
+import uWS from 'uWebSockets.js';
 
 import { Request  } from './http/Request';
 import { Response  } from './http/Response';
@@ -19,13 +19,13 @@ export interface HttpError extends Error {
 
 export interface App {
   /** access to the uWs App Instance */
-  app: uWs.TemplatedApp;
+  app: uWS.TemplatedApp;
   /** Listens to hostname & port. Callback hands either false or a listen socket. */
-  listen(host: uWs.RecognizedString, port: number): Promise<uWs.us_listen_socket|false>;
+  listen(host: uWS.RecognizedString, port: number): Promise<uWS.us_listen_socket|false>;
   /** Listens to port. Callback hands either false or a listen socket. */
-  listen(port: number): Promise<uWs.us_listen_socket|false>;
+  listen(port: number): Promise<uWS.us_listen_socket|false>;
   /** Listens to port and sets Listen Options. Callback hands either false or a listen socket. */
-  listen(port: number, options: uWs.ListenOptions) : Promise<uWs.us_listen_socket|false>;
+  listen(port: number, options: uWS.ListenOptions) : Promise<uWS.us_listen_socket|false>;
   /** Close app */
   close(): Promise<void>;
   /** Registers an HTTP GET handler matching specified URL pattern. */
@@ -49,20 +49,20 @@ export interface App {
   /** Registers an HTTP handler matching specified URL pattern on any HTTP method. */
   any(pattern: string, ...handlers: typeof Middleware[]) : App;
   /** Registers a handler matching specified URL pattern where WebSocket upgrade requests are caught. */
-  ws(pattern: uWs.RecognizedString, behavior: uWs.WebSocketBehavior) : App;
+  ws(pattern: uWS.RecognizedString, behavior: uWS.WebSocketBehavior) : App;
   /** Publishes a message under topic, for all WebSockets under this app. See WebSocket.publish. */
-  publish(topic: uWs.RecognizedString, message: uWs.RecognizedString, isBinary?: boolean, compress?: boolean) : boolean;
+  publish(topic: uWS.RecognizedString, message: uWS.RecognizedString, isBinary?: boolean, compress?: boolean) : boolean;
   /** Returns number of subscribers for this topic. */
-  numSubscribers(topic: uWs.RecognizedString) : number;
+  numSubscribers(topic: uWS.RecognizedString) : number;
   /** Adds a server name. */
-  addServerName(hostname: string, options: uWs.AppOptions): App;
+  addServerName(hostname: string, options: uWS.AppOptions): App;
   /** Removes a server name. */
   removeServerName(hostname: string): App;
   /** Registers a synchronous callback on missing server names. See /examples/ServerName.js. */
   missingServerName(cb: (hostname: string) => void): App;
 }
 
-export interface AppOptions extends uWs.AppOptions {
+export interface AppOptions extends uWS.AppOptions {
   /** 
    * If `true` uses uWs.SSLApp instead of uWs.App 
    */

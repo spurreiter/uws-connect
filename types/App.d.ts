@@ -11,8 +11,8 @@ export class App {
      * @returns {import('./types').App}
      */
     constructor(options?: import("./types").AppOptions | undefined);
-    app: uWs.TemplatedApp | undefined;
+    app: uWS.TemplatedApp | undefined;
     listen: ((...args: any[]) => Promise<any>) | undefined;
     close: (() => Promise<void>) | undefined;
 }
-import uWs from "uWebSockets.js";
+import uWS from "uWebSockets.js";

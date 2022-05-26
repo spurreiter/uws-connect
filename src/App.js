@@ -1,7 +1,7 @@
 /* eslint camelcase: off */
 
 // @ts-ignore
-import uWs from 'uWebSockets.js'
+import uWS from 'uWebSockets.js'
 import { connect } from './connect.js'
 import { nap } from './utils/nap.js'
 
@@ -24,12 +24,12 @@ export function App (options) {
   } = options || {}
 
   let listenSocket
-  const app = isSsl ? uWs.SSLApp(opts) : uWs.App(opts)
+  const app = isSsl ? uWS.SSLApp(opts) : uWS.App(opts)
   this.app = app
 
   if (isSilent) {
     // @ts-ignore
-    uWs._cfg('silent') // keyCode = 655 + 1 (addon.cpp)
+    uWS._cfg('silent') // keyCode = 655 + 1 (addon.cpp)
   }
 
   this.listen = (...args) => {
@@ -51,7 +51,7 @@ export function App (options) {
   }
 
   this.close = async () => {
-    uWs.us_listen_socket_close(listenSocket)
+    uWS.us_listen_socket_close(listenSocket)
     await nap(50)
   }
 

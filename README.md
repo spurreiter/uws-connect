@@ -6,7 +6,7 @@ Provides support for
 
 - connect helper for connecting connect, express middlewares
 - body-parser (json, form-urlencoded)
-- nodejs streams support for `uWs.HttpRequest` and `uWs.HttpResponse` 
+- nodejs streams support for `uWS.HttpRequest` and `uWS.HttpResponse` 
   (may not be 100% compliant with nodejs streams)
 
 The design aims to be as fast and unopinionated as possible.
@@ -44,7 +44,7 @@ app.get('/',
   (req, res, next) => {
     next()
   },
-  // async middleware (no need for `next()` or `try {} catch (){}`)
+  // async middleware (no need for `next()` or `try {} catch (err) {}`)
   async (req, res) => {
     await something()
   },
@@ -88,11 +88,11 @@ trade speed...
 
 ```js
 // same as `import uWs from 'uWebSockets.js'`
-import { uWs } from 'uws-connect'
+import { uWS } from 'uws-connect'
 import cors from 'cors'
-const uapp = uWs.App()
+const uapp = uWS.App()
 
-// just uWs, as fast as fast can be
+// just uWS, as fast as fast can be
 uapp.get('/', (response, request) => response.end('done'))
 
 // use some routes with connect middlewares (like cors)

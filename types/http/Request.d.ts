@@ -16,10 +16,12 @@ export class Request extends Readable {
     method: string;
     connection: {};
     socket: {};
+    set url(arg: any);
     /**
      * request url
      */
-    get url(): string;
+    get url(): any;
+    _url: any;
     /**
      * request query
      *
