@@ -34,6 +34,7 @@ let files = shuffle(
     'express.js',
     'hyper-express.js',
     'native.js',
+    'restana.js',
     'uws-connect.js',
     'uws.js'
   ]

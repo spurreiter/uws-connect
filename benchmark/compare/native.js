@@ -7,7 +7,7 @@ http.createServer((req, res) => {
   } else if (req.url === '/') {
     res.end('Hello')
   } else if (req.url.indexOf('/users/') === 0) {
-    const id = req.url.substr(7)
+    const id = req.url.slice(7)
     res.end(`User ${id} ${res.locals}`)
   }
 }).listen(5050)
