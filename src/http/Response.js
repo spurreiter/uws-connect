@@ -20,21 +20,20 @@ const getStatus = (status) => `${status} ${STATUS_CODES[status] || ''}`
 
 export class Response extends Writable {
   /**
-   * @param {uWs.HttpResponse} rawRes
+   * @param {uWs.HttpResponse} uwsRes
    * @param {Request} req
    * @param {WritableOptions} [options]
    */
-  constructor (rawRes, req, options) {
+  constructor (uwsRes, req, options) {
     super(options)
-    this._res = rawRes
+    this._uwsRes = uwsRes
     this._req = req
-    // this._req = rawReq // currently not in use
     this._headers = {}
     this._status = 200
     this.headersSent = false
     this.finished = false // @deprecated since: v12.16.0 but used by serve-static / on-finished
 
-    this._res.onAborted(() => {
+    this._uwsRes.onAborted(() => {
       this.destroy()
       this.emit('close')
       this.removeAllListeners()
@@ -92,12 +91,12 @@ export class Response extends Writable {
    */
   _writeHeaders () {
     if (this.headersSent) return
-    this._res.writeStatus(getStatus(this._status))
+    this._uwsRes.writeStatus(getStatus(this._status))
 
     for (const [lc, [key, value]] of Object.entries(this._headers)) {
       // never set content-length as request crashes then
       if (lc === 'content-length') continue
-      this._res.writeHeader(key, value)
+      this._uwsRes.writeHeader(key, value)
     }
     this.headersSent = true
   }
@@ -131,11 +130,11 @@ export class Response extends Writable {
    */
   write (chunk) {
     if (this.destroyed || this.finished) return true
-    const lastOffset = this._res.getWriteOffset()
+    const lastOffset = this._uwsRes.getWriteOffset()
     this._writeHeaders()
-    const drain = this._res.write(chunk)
+    const drain = this._uwsRes.write(chunk)
     if (!drain) {
-      this._res.onWritable(offset => {
+      this._uwsRes.onWritable(offset => {
         const sliced = chunk.slice(offset - lastOffset)
         const drain = this.write(sliced) // drain === true; chunk is now fully written
         if (drain) { this.emit('drain') }
@@ -167,7 +166,7 @@ export class Response extends Writable {
     if (this.destroyed || this.finished) return
     // no backpressure handling here
     this._writeHeaders()
-    this._res.end(body, closeConnection)
+    this._uwsRes.end(body, closeConnection)
     super.end()
     this._finish()
   }
@@ -180,11 +179,11 @@ export class Response extends Writable {
   tryEnd (body) {
     if (this.destroyed || this.finished) return true
     this._writeHeaders()
-    const lastOffset = this._res.getWriteOffset()
+    const lastOffset = this._uwsRes.getWriteOffset()
     // @ts-expect-error
-    const [drain] = this._res.tryEnd(body)
+    const [drain] = this._uwsRes.tryEnd(body)
     if (!drain) {
-      this._res.onWritable(offset => {
+      this._uwsRes.onWritable(offset => {
         const sliced = body.slice(offset - lastOffset)
         return this.tryEnd(sliced)
       })

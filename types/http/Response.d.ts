@@ -1,12 +1,12 @@
 /// <reference types="node" />
 export class Response extends Writable {
     /**
-     * @param {uWs.HttpResponse} rawRes
+     * @param {uWs.HttpResponse} uwsRes
      * @param {Request} req
      * @param {WritableOptions} [options]
      */
-    constructor(rawRes: uWs.HttpResponse, req: Request, options?: import("stream").WritableOptions | undefined);
-    _res: import("uWebSockets.js").HttpResponse;
+    constructor(uwsRes: uWs.HttpResponse, req: Request, options?: import("stream").WritableOptions | undefined);
+    _uwsRes: import("uWebSockets.js").HttpResponse;
     _req: import("./Request.js").Request;
     _headers: {};
     _status: number;

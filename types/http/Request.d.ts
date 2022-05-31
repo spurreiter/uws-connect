@@ -4,13 +4,13 @@
 /** @typedef {import('uWebSockets.js').HttpResponse} uWs.HttpResponse */
 export class Request extends Readable {
     /**
-     * @param {uWs.HttpResponse} rawRes
-     * @param {uWs.HttpRequest} rawReq
+     * @param {uWs.HttpResponse} uwsRes
+     * @param {uWs.HttpRequest} uwsReq
      * @param {ReadableOptions} [options]
      */
-    constructor(rawRes: uWs.HttpResponse, rawReq: uWs.HttpRequest, options?: import("stream").ReadableOptions | undefined);
-    _req: import("uWebSockets.js").HttpRequest;
-    _res: import("uWebSockets.js").HttpResponse;
+    constructor(uwsRes: uWs.HttpResponse, uwsReq: uWs.HttpRequest, options?: import("stream").ReadableOptions | undefined);
+    _uwsReq: import("uWebSockets.js").HttpRequest;
+    _uwsRes: import("uWebSockets.js").HttpResponse;
     headers: {};
     params: {};
     method: string;

@@ -8,37 +8,37 @@ import qs from 'qs'
 
 export class Request extends Readable {
   /**
-   * @param {uWs.HttpResponse} rawRes
-   * @param {uWs.HttpRequest} rawReq
+   * @param {uWs.HttpResponse} uwsRes
+   * @param {uWs.HttpRequest} uwsReq
    * @param {ReadableOptions} [options]
    */
-  constructor (rawRes, rawReq, options) {
+  constructor (uwsRes, uwsReq, options) {
     super(options)
-    this._req = rawReq
-    this._res = rawRes
+    this._uwsReq = uwsReq
+    this._uwsRes = uwsRes
 
     this.headers = {}
     this.params = {}
 
-    this._req.forEach((key, value) => {
+    this._uwsReq.forEach((key, value) => {
       // @ts-ignore
       this.headers[key.toLowerCase()] = value
     })
-    this.method = this._req.getMethod().toUpperCase()
+    this.method = this._uwsReq.getMethod().toUpperCase()
 
     this.connection = this.socket = {}
     Object.defineProperty(this.socket, 'remoteAddress',
       {
-        get: () => rawRes?.getRemoteAddressAsText &&
-        Buffer.from(rawRes.getRemoteAddressAsText()).toString()
+        get: () => uwsRes?.getRemoteAddressAsText &&
+        Buffer.from(uwsRes.getRemoteAddressAsText()).toString()
       }
     )
 
-    this._res.onData((arrayBuffer, isLast) => {
+    this._uwsRes.onData((arrayBuffer, isLast) => {
       const chunk = Buffer.from(arrayBuffer)
       this.emit('data', chunk)
       if (isLast) {
-        this._res._ended = true
+        this._uwsRes._ended = true
         this.emit('end')
       }
     })
@@ -48,7 +48,7 @@ export class Request extends Readable {
    * request url
    */
   get url () {
-    return this._url || this._req.getUrl()
+    return this._url || this._uwsReq.getUrl()
   }
 
   set url (newUrl) {
@@ -63,7 +63,7 @@ export class Request extends Readable {
    * @returns {object}
    */
   get query () {
-    return qs.parse(this._req.getQuery())
+    return qs.parse(this._uwsReq.getQuery())
   }
 
   /**
@@ -83,7 +83,7 @@ export class Request extends Readable {
    */
   pause () {
     if (!this.isPaused()) {
-      !this._res._ended && this._res.pause()
+      !this._uwsRes._ended && this._uwsRes.pause()
       super.pause()
     }
     return this
@@ -95,7 +95,7 @@ export class Request extends Readable {
   resume () {
     if (this.isPaused()) {
       super.resume()
-      !this._res._ended && this._res.resume()
+      !this._uwsRes._ended && this._uwsRes.resume()
     }
     return this
   }
@@ -106,6 +106,6 @@ export class Request extends Readable {
    * @returns {string}
    */
   getParameter (index) {
-    return this._req.getParameter(index)
+    return this._uwsReq.getParameter(index)
   }
 }
