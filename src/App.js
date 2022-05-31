@@ -35,6 +35,12 @@ export function App (options) {
     uWS._cfg('silent') // keyCode = 655 + 1 (addon.cpp)
   }
 
+  this.address = () => {
+    if (listenSocket) {
+      return { port: uWS.us_socket_local_port(listenSocket) }
+    }
+  }
+
   this.listen = (...args) => {
     return new Promise((resolve, reject) => {
       const cb = (socket) => {

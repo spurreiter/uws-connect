@@ -14,6 +14,9 @@ export class App {
      */
     constructor(options?: import("./types.d").AppOptions | undefined);
     app: uWS.TemplatedApp | undefined;
+    address: (() => {
+        port: number;
+    } | undefined) | undefined;
     listen: ((...args: any[]) => Promise<any>) | undefined;
     close: (() => Promise<void>) | undefined;
 }

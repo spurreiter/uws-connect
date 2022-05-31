@@ -2,26 +2,32 @@ import { STATUS_CODES } from 'http'
 import { Writable } from 'stream'
 import cookie from 'cookie'
 
+/** @typedef {import('node:stream').WritableOptions} WritableOptions */
+/** @typedef {import('uWebSockets.js').HttpRequest} uWs.HttpRequest */
+/** @typedef {import('./Request.js').Request} Request */
+/** @typedef {import('uWebSockets.js').HttpResponse} uWs.HttpResponse */
+
 const COOKIE_DEFAULTS = {
   path: '/',
   domain: undefined
 }
 
-/** @typedef {import('node:stream').WritableOptions} WritableOptions */
-/** @typedef {import('uWebSockets.js').HttpRequest} uWs.HttpRequest */
-/** @typedef {import('uWebSockets.js').HttpResponse} uWs.HttpResponse */
+const CONTENT_TYPE = 'Content-Type'
+const CONTENT_LENGTH = 'Content-Length'
+const TRANSFER_ENCODING = 'Transfer-Encoding'
 
 const getStatus = (status) => `${status} ${STATUS_CODES[status] || ''}`
 
 export class Response extends Writable {
   /**
    * @param {uWs.HttpResponse} rawRes
-   * @param {uWs.HttpRequest} [rawReq]
+   * @param {Request} req
    * @param {WritableOptions} [options]
    */
-  constructor (rawRes, rawReq, options) {
+  constructor (rawRes, req, options) {
     super(options)
     this._res = rawRes
+    this._req = req
     // this._req = rawReq // currently not in use
     this._headers = {}
     this._status = 200
@@ -156,7 +162,7 @@ export class Response extends Writable {
    * @param {string|Buffer} body
    * @param {boolean} [closeConnection]
    */
-  // @ts-ignore
+  // @ts-expect-error
   end (body, closeConnection) {
     if (this.destroyed || this.finished) return
     // no backpressure handling here
@@ -175,7 +181,7 @@ export class Response extends Writable {
     if (this.destroyed || this.finished) return true
     this._writeHeaders()
     const lastOffset = this._res.getWriteOffset()
-    // @ts-ignore
+    // @ts-expect-error
     const [drain] = this._res.tryEnd(body)
     if (!drain) {
       this._res.onWritable(offset => {
@@ -191,27 +197,57 @@ export class Response extends Writable {
   /**
    * send a response
    * @param {string|Buffer|object|null|boolean|number} data
-   * @param {*} status
-   * @param {*} headers
+   * @param {number} [status]
+   * @param {object} [headers]
    */
-  send (data, status = 200, headers = {}) {
-    // @ts-ignore
-    const _data = data || this.body
-    let body
-    if (_data instanceof Buffer || typeof _data === 'string') {
-      body = _data
-    } else if (typeof _data === 'object') {
-      this.setHeader('Content-Type', 'application/json; charset=utf-8')
-      body = JSON.stringify(_data)
-    } else {
-      body = `${_data ?? ''}`
-    }
+  send (data, status, headers = {}) {
+    // @ts-expect-error
+    const chunk = data || this.body
+    /** @type {Buffer|string} */
+    let buffer = ''
 
     for (const [key, value] of Object.entries(headers)) {
       this.setHeader(key, value)
     }
-    this.statusCode = status
-    this.tryEnd(body)
+
+    if (chunk !== undefined) {
+      switch (typeof chunk) {
+        case 'string':
+          setDefaultContentType(this, 'text/plain')
+          buffer = Buffer.from(chunk)
+          break
+        case 'boolean':
+        case 'number':
+        case 'object':
+          if (Buffer.isBuffer(chunk)) {
+            setDefaultContentType(this, 'application/octet-stream', false)
+            buffer = chunk
+          } else {
+            setDefaultContentType(this, 'application/json')
+            buffer = Buffer.from(JSON.stringify(chunk))
+          }
+          break
+        default:
+          buffer = ''
+          break
+      }
+    }
+
+    this.statusCode = status || this._status || 200
+
+    // strip irrelevant headers
+    if ([204, 205, 304].includes(this.statusCode)) {
+      this.removeHeader(CONTENT_TYPE)
+      this.removeHeader(CONTENT_LENGTH)
+      this.removeHeader(TRANSFER_ENCODING)
+      buffer = ''
+    }
+
+    if (this._req.method === 'HEAD') {
+      buffer = ''
+    }
+
+    this.tryEnd(buffer)
   }
 
   /**
@@ -222,5 +258,18 @@ export class Response extends Writable {
     this.emit('finish')
     this.removeAllListeners()
     this.destroy()
+  }
+}
+
+/**
+ * set content type if not set already
+ * @param {any} res Response
+ * @param {string} type
+ * @param {string|false} encoding
+ */
+function setDefaultContentType (res, type, encoding = 'utf-8') {
+  if (!res.getHeader(CONTENT_TYPE)) {
+    const contentType = type + (encoding ? '; charset=' + encoding : '')
+    res.setHeader(CONTENT_TYPE, contentType)
   }
 }

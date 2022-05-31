@@ -2,11 +2,12 @@
 export class Response extends Writable {
     /**
      * @param {uWs.HttpResponse} rawRes
-     * @param {uWs.HttpRequest} [rawReq]
+     * @param {Request} req
      * @param {WritableOptions} [options]
      */
-    constructor(rawRes: uWs.HttpResponse, rawReq?: import("uWebSockets.js").HttpRequest | undefined, options?: import("stream").WritableOptions | undefined);
+    constructor(rawRes: uWs.HttpResponse, req: Request, options?: import("stream").WritableOptions | undefined);
     _res: import("uWebSockets.js").HttpResponse;
+    _req: import("./Request.js").Request;
     _headers: {};
     _status: number;
     headersSent: boolean;
@@ -84,10 +85,10 @@ export class Response extends Writable {
     /**
      * send a response
      * @param {string|Buffer|object|null|boolean|number} data
-     * @param {*} status
-     * @param {*} headers
+     * @param {number} [status]
+     * @param {object} [headers]
      */
-    send(data: string | Buffer | object | null | boolean | number, status?: any, headers?: any): void;
+    send(data: string | Buffer | object | null | boolean | number, status?: number | undefined, headers?: object): void;
     /**
      * @private
      */
@@ -98,4 +99,5 @@ export namespace uWs {
     type HttpRequest = import('uWebSockets.js').HttpRequest;
     type HttpResponse = import('uWebSockets.js').HttpResponse;
 }
+export type Request = import('./Request.js').Request;
 import { Writable } from "stream";

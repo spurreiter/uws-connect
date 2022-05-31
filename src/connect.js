@@ -32,8 +32,8 @@ export const connect = (options = {}) => (...handlers) => {
    */
   return (response, request) => {
     // @ts-ignore
-    const res = new Response(response)
     const req = new Request(response, request)
+    const res = new Response(response, req)
 
     let i = 0
 
