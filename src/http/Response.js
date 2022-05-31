@@ -157,7 +157,8 @@ export class Response extends Writable {
   }
 
   /**
-   * end a request
+   * end a request (without backpressure handling).
+   * use `res.send` if backpressure handling is needed.
    * @param {string|Buffer} body
    * @param {boolean} [closeConnection]
    */
