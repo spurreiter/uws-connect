@@ -1,6 +1,5 @@
 import { Readable } from 'stream'
 import cookie from 'cookie'
-import qs from 'qs'
 
 /** @typedef {import('node:stream').ReadableOptions} ReadableOptions */
 /** @typedef {import('uWebSockets.js').HttpRequest} uWs.HttpRequest */
@@ -48,7 +47,7 @@ export class Request extends Readable {
    * request url
    */
   get url () {
-    return this._url || this._uwsReq.getUrl()
+    return this._url || (this._url = this._uwsReq.getUrl())
   }
 
   set url (newUrl) {
@@ -58,12 +57,12 @@ export class Request extends Readable {
   /**
    * request query
    *
-   * uses [qs](https://www.npmjs.com/package/qs) for query string parsing
+   * uses URLSearchParams for query string parsing
    *
    * @returns {object}
    */
   get query () {
-    return qs.parse(this._uwsReq.getQuery())
+    return Object.fromEntries(new URLSearchParams(this._uwsReq.getQuery()))
   }
 
   /**

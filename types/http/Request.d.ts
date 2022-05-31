@@ -25,7 +25,7 @@ export class Request extends Readable {
     /**
      * request query
      *
-     * uses [qs](https://www.npmjs.com/package/qs) for query string parsing
+     * uses URLSearchParams for query string parsing
      *
      * @returns {object}
      */

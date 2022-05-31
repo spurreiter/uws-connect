@@ -71,7 +71,8 @@ export class Response extends Writable {
      */
     _write(chunk: string | Buffer, encoding: string, callback: Function): void;
     /**
-     * end a request
+     * end a request (without backpressure handling).
+     * use `res.send` if backpressure handling is needed.
      * @param {string|Buffer} body
      * @param {boolean} [closeConnection]
      */
