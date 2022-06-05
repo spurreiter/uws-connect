@@ -41,6 +41,11 @@ export function App (options) {
     }
   }
 
+  /**
+   * Listens to hostname & port. Callback hands either false or a listen socket.
+   * @param {[host: uWS.RecognizedString, port: number]|[port: number]|[port: number, options: uWS.ListenOptions]} args
+   * @returns {Promise<uWS.us_listen_socket>}
+   */
   this.listen = (...args) => {
     return new Promise((resolve, reject) => {
       const cb = (socket) => {
@@ -59,6 +64,10 @@ export function App (options) {
     })
   }
 
+  /**
+   * Close listening socket
+   * @returns {Promise<void>}
+   */
   this.close = async () => {
     uWS.us_listen_socket_close(listenSocket)
     await nap(50)
