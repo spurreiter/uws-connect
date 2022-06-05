@@ -2,17 +2,23 @@
 /** @typedef {import('node:stream').ReadableOptions} ReadableOptions */
 /** @typedef {import('uWebSockets.js').HttpRequest} uWs.HttpRequest */
 /** @typedef {import('uWebSockets.js').HttpResponse} uWs.HttpResponse */
+/**
+ * @typedef {ReadableOptions} ReadableOptionsExt
+ * @property {'http'|'https'} protocol
+ */
 export class Request extends Readable {
     /**
      * @param {uWs.HttpResponse} uwsRes
      * @param {uWs.HttpRequest} uwsReq
-     * @param {ReadableOptions} [options]
+     * @param {ReadableOptionsExt} [options]
      */
     constructor(uwsRes: uWs.HttpResponse, uwsReq: uWs.HttpRequest, options?: import("stream").ReadableOptions | undefined);
     _uwsReq: import("uWebSockets.js").HttpRequest;
     _uwsRes: import("uWebSockets.js").HttpResponse;
     headers: {};
     params: {};
+    /** @type {'http'|'https'} */
+    protocol: 'http' | 'https';
     method: string;
     connection: {};
     socket: {};
@@ -56,4 +62,5 @@ export namespace uWs {
     type HttpRequest = import('uWebSockets.js').HttpRequest;
     type HttpResponse = import('uWebSockets.js').HttpResponse;
 }
+export type ReadableOptionsExt = ReadableOptions;
 import { Readable } from "stream";

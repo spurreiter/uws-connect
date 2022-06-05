@@ -12,14 +12,18 @@ const { isAsyncFunction } = util.types
 
 /**
  * connects middleware handlers
- * @param {object} options
+ * @param {object} [options]
+ * @param {Function} [options.finalHandler] final handler for connect stack
+ * @param {boolean} [options.isSsl=false] sets req.protocol
  * @param {(err: HttpError|Error|undefined|null, req: Request, res: Response) => void} [options.finalHandler]
  * @returns {(...Middleware) => (res: uWS.HttpResponse, req: uWS.HttpRequest) => void}
  */
 export const connect = (options = {}) => (...handlers) => {
   const done = options.finalHandler
+  const protocol = options.isSsl ? 'https' : 'http'
 
   const stack = handlers
+    .flat(Infinity)
     .map(fn => {
       if (typeof fn !== 'function') throw new Error('need function')
       const isAsync = isAsyncFunction(fn)
@@ -32,7 +36,7 @@ export const connect = (options = {}) => (...handlers) => {
    */
   return (response, request) => {
     // @ts-ignore
-    const req = new Request(response, request)
+    const req = new Request(response, request, { protocol })
     const res = new Response(response, req)
 
     let i = 0

@@ -76,7 +76,7 @@ export function App (options) {
   const methods = ['get', 'post', 'options', 'del', 'patch', 'put', 'head',
     'connect', 'trace', 'any']
   // @ts-ignore
-  const glue = connect({ finalHandler })
+  const glue = connect({ finalHandler, isSsl })
   for (const method of methods) {
     this[method] = (pattern, ...handlers) => {
       app[method](pattern, glue(...handlers))

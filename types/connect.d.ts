@@ -1,6 +1,7 @@
 export function connect(options?: {
-    finalHandler?: ((err: HttpError | Error | undefined | null, req: Request, res: Response) => void) | undefined;
-}): (...Middleware: any[]) => (res: uWS.HttpResponse, req: uWS.HttpRequest) => void;
+    finalHandler?: Function | undefined;
+    isSsl?: boolean | undefined;
+} | undefined): (...Middleware: any[]) => (res: uWS.HttpResponse, req: uWS.HttpRequest) => void;
 export type Middleware = typeof import("./types").Middleware;
 export type HttpError = import('./utils/HttpError.js').HttpError;
 export namespace uWS {

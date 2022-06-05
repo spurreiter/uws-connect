@@ -5,19 +5,28 @@ import cookie from 'cookie'
 /** @typedef {import('uWebSockets.js').HttpRequest} uWs.HttpRequest */
 /** @typedef {import('uWebSockets.js').HttpResponse} uWs.HttpResponse */
 
+/**
+ * @typedef {ReadableOptions} ReadableOptionsExt
+ * @property {'http'|'https'} protocol
+ */
+
 export class Request extends Readable {
   /**
    * @param {uWs.HttpResponse} uwsRes
    * @param {uWs.HttpRequest} uwsReq
-   * @param {ReadableOptions} [options]
+   * @param {ReadableOptionsExt} [options]
    */
-  constructor (uwsRes, uwsReq, options) {
-    super(options)
+  constructor (uwsRes, uwsReq, options = {}) {
+    // @ts-expect-error
+    const { protocol = 'http', ...opts } = options
+    super(opts)
     this._uwsReq = uwsReq
     this._uwsRes = uwsRes
 
     this.headers = {}
     this.params = {}
+    /** @type {'http'|'https'} */
+    this.protocol = protocol
 
     this._uwsReq.forEach((key, value) => {
       // @ts-ignore
