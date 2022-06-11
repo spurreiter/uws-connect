@@ -71,7 +71,17 @@ export class Request extends Readable {
    * @returns {object}
    */
   get query () {
-    return Object.fromEntries(new URLSearchParams(this._uwsReq.getQuery()))
+    const searchParams = new URLSearchParams(this._uwsReq.getQuery())
+    const query = {}
+    for (const [name, value] of searchParams.entries()) {
+      if (query[name]) {
+        // @ts-expect-error
+        query[name] = [].concat(query[name], value)
+      } else {
+        query[name] = value
+      }
+    }
+    return query
   }
 
   /**
