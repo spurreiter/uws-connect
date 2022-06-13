@@ -75,8 +75,9 @@ export class Request extends Readable {
     const query = {}
     for (const [name, value] of searchParams.entries()) {
       if (query[name]) {
-        // @ts-expect-error
-        query[name] = [].concat(query[name], value)
+        Array.isArray(query[name])
+          ? query[name].push(value)
+          : (query[name] = [query[name], value])
       } else {
         query[name] = value
       }
