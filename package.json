@@ -48,7 +48,8 @@
     "types": "rm -r types; tsc --emitDeclarationOnly true --noEmitOnError && cp src/*.d.ts types"
   },
   "mocha": {
-    "exit": true
+    "exit": true,
+    "recursive": true
   },
   "dependencies": {
     "cookie": "^0.5.0",
@@ -56,17 +57,17 @@
   },
   "devDependencies": {
     "@types/cookie": "^0.5.1",
-    "@types/node": "^16.11.36",
+    "@types/node": "^18.0.3",
     "c8": "^7.11.3",
     "cors": "^2.8.5",
-    "eslint": "^8.16.0",
+    "eslint": "^8.19.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-n": "^15.2.0",
+    "eslint-plugin-n": "^15.2.4",
     "eslint-plugin-promise": "^6.0.0",
     "mocha": "^10.0.0",
     "serve-static": "^1.15.0",
-    "supertest": "^6.2.3",
-    "typescript": "^4.7.2"
+    "supertest": "^6.2.4",
+    "typescript": "^4.7.4"
   }
 }
