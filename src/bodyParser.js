@@ -1,5 +1,5 @@
 import { HttpError } from './utils/HttpError.js'
-import qs from 'qs'
+import * as qs from './utils/qs.js'
 
 export const CONTENT_TYPE_JSON = 'application/json'
 export const CONTENT_TYPE_FORM = 'application/x-www-form-urlencoded'
