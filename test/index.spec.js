@@ -170,7 +170,8 @@ describe('uws-connect', function () {
       'set-cookie': [
         'test=100; Domain=foo.bar; Path=/; HttpOnly',
         'foo=bar; Path=/'
-      ]
+      ],
+      date: new Date().toUTCString()
     })
     const text = await res.text()
     assert.equal(text, '')
@@ -184,7 +185,8 @@ describe('uws-connect', function () {
       'set-cookie': [
         'test=; Path=/login; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly',
         'foo=bar; Path=/'
-      ]
+      ],
+      date: new Date().toUTCString()
     })
     const text = await res.text()
     assert.equal(text, '')

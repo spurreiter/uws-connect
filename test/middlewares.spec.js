@@ -59,7 +59,8 @@ describe('connect compliant middlewares', function () {
         'access-control-allow-methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
         'access-control-allow-origin': 'http://foo.bar',
         'content-length': '0',
-        vary: 'Origin, Access-Control-Request-Headers'
+        vary: 'Origin, Access-Control-Request-Headers',
+        date: new Date().toUTCString()
       })
     })
 
@@ -80,7 +81,8 @@ describe('connect compliant middlewares', function () {
         'access-control-allow-headers': 'Content-Type',
         'access-control-allow-methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
         'content-length': '0',
-        vary: 'Origin, Access-Control-Request-Headers'
+        vary: 'Origin, Access-Control-Request-Headers',
+        date: new Date().toUTCString()
       })
     })
 
@@ -96,7 +98,8 @@ describe('connect compliant middlewares', function () {
       assert.deepEqual(headers, {
         'access-control-allow-origin': 'http://foo.bar',
         'content-length': '4',
-        vary: 'Origin'
+        vary: 'Origin',
+        date: new Date().toUTCString()
       })
     })
   })

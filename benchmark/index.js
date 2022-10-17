@@ -66,7 +66,7 @@ const versions = files.reduce((o, file) => {
   return o
 }, {
   'native.js': process.version,
-  'uws.js': '20.12.0'
+  'uws.js': '20.13.0'
 })
 
 const argv = minimist(process.argv.slice(2))
