@@ -4,9 +4,9 @@ Use connect like middlewares with [uWebSockets.js][].
 
 Provides support for
 
-- connect helper for connecting connect, express middlewares
+- connecting connect, express middlewares
 - body-parser (json, form-urlencoded)
-- nodejs streams support for `uWS.HttpRequest` and `uWS.HttpResponse` 
+- nodejs streams for `uWS.HttpRequest` and `uWS.HttpResponse`
   (may not be 100% compliant with nodejs streams)
 
 The design aims to be as fast and unopinionated as possible.
@@ -116,15 +116,13 @@ $ node index.js -d 10 -c 2500 -p 4
 
 *) Results may vary on your machine.
 
-| Package       |  Version | Requests/s | Latency (ms) | Throughput (Mb) |
-| :------------ | -------: | ---------: | -----------: | --------------: |
-| uws           |  20.10.0 |     196544 |       195.59 |           13.12 |
-| uws-connect   |          |     191147 |       154.36 |            9.93 |
-| hyper-express |    6.1.3 |      97642 |       216.21 |            6.52 |
-| native        | v16.15.0 |      36436 |       281.89 |            4.76 |
-| restana       |    4.9.5 |      28638 |       402.04 |            3.74 |
-| express       |   4.18.1 |      11410 |       451.20 |            1.49 |
-
+| Package     |  Version | Requests/s | Latency (ms) | Throughput (Mb) |
+| :---------- | -------: | ---------: | -----------: | --------------: |
+| uws         |  20.14.0 |     162620 |       196.97 |           16.59 |
+| uws-connect |    1.1.2 |     108816 |       245.28 |            9.34 |
+| native      | v18.12.0 |      59968 |       170.29 |            7.83 |
+| restana     |    4.9.6 |      45266 |       310.99 |            5.91 |
+| express     |   4.18.2 |      18462 |       365.99 |            2.41 |
 
 # Contributing
 
