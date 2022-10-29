@@ -40,6 +40,13 @@ let files = shuffle(
   ]
 )
 
+const filePkgMapper = {
+  'uws.js': 'uWebSockets.js'
+}
+const pathPkgMapper = {
+  'uws-connect': `${__dirname}/../package.json`
+}
+
 function findPackageJson (specifier, parent = '') {
   const segments = path.resolve(parent, process.cwd(), parent).split(path.sep)
   const pckg = ['node_modules', specifier, 'package.json']
@@ -54,9 +61,9 @@ function findPackageJson (specifier, parent = '') {
 }
 
 const versions = files.reduce((o, file) => {
-  const packge = file.replace('.js', '')
+  const packge = filePkgMapper[file] || file.replace('.js', '')
   try {
-    const pckgPath = findPackageJson(packge)
+    const pckgPath = pathPkgMapper[packge] || findPackageJson(packge)
     const { version } = JSON.parse(fs.readFileSync(pckgPath, 'utf8'))
     o[packge] = o[file] = version
   } catch (e) {
@@ -65,8 +72,7 @@ const versions = files.reduce((o, file) => {
   }
   return o
 }, {
-  'native.js': process.version,
-  'uws.js': '20.13.0'
+  'native.js': process.version
 })
 
 const argv = minimist(process.argv.slice(2))
