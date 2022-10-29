@@ -8,6 +8,7 @@ Provides support for
 - body-parser (json, form-urlencoded)
 - nodejs streams for `uWS.HttpRequest` and `uWS.HttpResponse`
   (may not be 100% compliant with nodejs streams)
+- final handler for errors
 
 The design aims to be as fast and unopinionated as possible.
 
@@ -88,7 +89,7 @@ trade speed...
 
 ```js
 // same as `import uWs from 'uWebSockets.js'`
-import { uWS } from 'uws-connect'
+import { uWS, connect } from 'uws-connect'
 import cors from 'cors'
 const uapp = uWS.App()
 
