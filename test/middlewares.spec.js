@@ -3,6 +3,7 @@ import assert from 'assert/strict'
 import path from 'path'
 import cors from 'cors'
 import serveStatic from 'serve-static'
+import { getHeaders, connectionClose } from './support/utils.js'
 
 import { App } from '../src/index.js'
 import { fetch } from './support/fetch.js'
@@ -25,12 +26,17 @@ describe('connect compliant middlewares', function () {
     // }
 
     app = new App()
-    app.options('/*', _cors)
+    app.options('/*',
+      connectionClose,
+      _cors
+    )
     app.get('/cors',
+      connectionClose,
       _cors,
       (req, res) => res.end('cors')
     )
     app.get('/static/*',
+      connectionClose,
       serveStatic(path.resolve(__dirname)) // contains a `/static` folder
     )
     await app.listen(port)
@@ -53,14 +59,13 @@ describe('connect compliant middlewares', function () {
       assert.strictEqual(res.status, 204)
       const text = await res.text()
       assert.equal(text, '')
-      const headers = Object.fromEntries(res.headers)
-      assert.deepEqual(headers, {
+      assert.deepEqual(getHeaders(res.headers), {
+        connection: 'close',
         'access-control-allow-headers': 'Content-Type',
         'access-control-allow-methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
         'access-control-allow-origin': 'http://foo.bar',
         'content-length': '0',
-        vary: 'Origin, Access-Control-Request-Headers',
-        date: new Date().toUTCString()
+        vary: 'Origin, Access-Control-Request-Headers'
       })
     })
 
@@ -76,13 +81,12 @@ describe('connect compliant middlewares', function () {
       assert.strictEqual(res.status, 204)
       const text = await res.text()
       assert.equal(text, '')
-      const headers = Object.fromEntries(res.headers)
-      assert.deepEqual(headers, {
+      assert.deepEqual(getHeaders(res.headers), {
+        connection: 'close',
         'access-control-allow-headers': 'Content-Type',
         'access-control-allow-methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
         'content-length': '0',
-        vary: 'Origin, Access-Control-Request-Headers',
-        date: new Date().toUTCString()
+        vary: 'Origin, Access-Control-Request-Headers'
       })
     })
 
@@ -94,12 +98,11 @@ describe('connect compliant middlewares', function () {
       assert.strictEqual(res.status, 200)
       const text = await res.text()
       assert.equal(text, 'cors')
-      const headers = Object.fromEntries(res.headers)
-      assert.deepEqual(headers, {
+      assert.deepEqual(getHeaders(res.headers), {
+        connection: 'close',
         'access-control-allow-origin': 'http://foo.bar',
         'content-length': '4',
-        vary: 'Origin',
-        date: new Date().toUTCString()
+        vary: 'Origin'
       })
     })
   })

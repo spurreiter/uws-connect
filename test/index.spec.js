@@ -2,6 +2,7 @@ import assert from 'assert/strict'
 
 import { App, connect, bodyParser } from '../src/index.js'
 import { fetch } from './support/fetch.js'
+import { getHeaders } from './support/utils.js'
 
 describe('uws-connect', function () {
   const port = 9001
@@ -165,13 +166,12 @@ describe('uws-connect', function () {
   it('set cookies', async function () {
     const res = await fetch(`${url}/cookies?name=test&value=100&domain=foo.bar&httpOnly=true`, {})
     assert.equal(res.status, 200)
-    assert.deepEqual(Object.fromEntries(res.headers), {
+    assert.deepEqual(getHeaders(res.headers), {
       'content-length': '0',
       'set-cookie': [
         'test=100; Domain=foo.bar; Path=/; HttpOnly',
         'foo=bar; Path=/'
-      ],
-      date: new Date().toUTCString()
+      ]
     })
     const text = await res.text()
     assert.equal(text, '')
@@ -180,13 +180,12 @@ describe('uws-connect', function () {
   it('clear cookie', async function () {
     const res = await fetch(`${url}/cookies?name=test&path=/login&httpOnly=true`, {})
     assert.equal(res.status, 200)
-    assert.deepEqual(Object.fromEntries(res.headers), {
+    assert.deepEqual(getHeaders(res.headers), {
       'content-length': '0',
       'set-cookie': [
         'test=; Path=/login; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly',
         'foo=bar; Path=/'
-      ],
-      date: new Date().toUTCString()
+      ]
     })
     const text = await res.text()
     assert.equal(text, '')
