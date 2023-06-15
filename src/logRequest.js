@@ -1,4 +1,3 @@
-
 /**
  * logs a single request
  * You may also want to consider other logger middlewares like

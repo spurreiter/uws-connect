@@ -45,11 +45,11 @@ export class Request extends Readable {
     /**
      * pauses stream
      */
-    pause(): Request;
+    pause(): this;
     /**
      * resumes stream
      */
-    resume(): Request;
+    resume(): this;
     /**
      * get `uWs.HttpRequest.getParameter()`
      * @param {number} index
@@ -63,4 +63,4 @@ export namespace uWs {
     type HttpResponse = import('uWebSockets.js').HttpResponse;
 }
 export type ReadableOptionsExt = ReadableOptions;
-import { Readable } from "stream";
+import { Readable } from 'stream';

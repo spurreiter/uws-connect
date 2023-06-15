@@ -40,9 +40,10 @@ export function bodyParser (options) {
     let length = 0
 
     const contentType = type || req.headers['content-type'] || ''
-    const contentLength = (req.headers['content-length'] === undefined)
+    const contentLength = Number((req.headers['content-length'] === undefined)
       ? NaN
       : toNumber(req.headers['content-length'], NaN)
+    )
 
     const onEnd = (err) => {
       req.raw = Buffer.concat(buffer)

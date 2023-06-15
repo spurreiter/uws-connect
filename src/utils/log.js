@@ -1,4 +1,3 @@
-
 const { DEBUG_LEVEL = '' } = process.env
 
 const LEVELS = ['error', 'warn', 'info', 'debug', 'trace']

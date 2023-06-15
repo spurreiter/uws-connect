@@ -49,7 +49,7 @@
      /** Registers an HTTP handler matching specified URL pattern on any HTTP method. */
      any(pattern: uWS.RecognizedString, handler: (res: uWS.HttpResponse, req: uWS.HttpRequest) => void) : App;
      /** Registers a handler matching specified URL pattern where WebSocket upgrade requests are caught. */
-     ws(pattern: uWS.RecognizedString, behavior: uWS.WebSocketBehavior) : App;
+     ws(pattern: uWS.RecognizedString, behavior: uWS.WebSocketBehavior<any>) : App;
      /** Publishes a message under topic, for all WebSockets under this app. See WebSocket.publish. */
      publish(topic: uWS.RecognizedString, message: uWS.RecognizedString, isBinary?: boolean, compress?: boolean) : boolean;
      /** Returns number of subscribers for this topic. */

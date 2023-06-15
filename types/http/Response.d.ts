@@ -101,4 +101,4 @@ export namespace uWs {
     type HttpResponse = import('uWebSockets.js').HttpResponse;
 }
 export type Request = import('./Request.js').Request;
-import { Writable } from "stream";
+import { Writable } from 'stream';

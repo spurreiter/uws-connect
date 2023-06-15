@@ -1,4 +1,3 @@
-
 export function MdTable (head, align = []) {
   this.md = [head]
   this.align = head.map((h, i) => {
