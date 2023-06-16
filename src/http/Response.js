@@ -38,6 +38,10 @@ export class Response extends Writable {
       this.emit('close')
       this.removeAllListeners()
     })
+
+    this.on('pipe', (readStream) => {
+      this._readStream = readStream
+    })
   }
 
   /**
@@ -91,7 +95,7 @@ export class Response extends Writable {
    * @param {string} value
    * @param {import('cookie').CookieSerializeOptions} options
    */
-  cookie(name, value = '', options = {}) {
+  cookie (name, value = '', options = {}) {
     const opts = { ...COOKIE_DEFAULTS, ...options }
     const setCookie = cookie.serialize(name, value, opts)
     const key = `set-cookie--${name}-${opts.path}-${opts.domain || ''}`
@@ -103,7 +107,7 @@ export class Response extends Writable {
    * @param {string} name
    * @param {import('cookie').CookieSerializeOptions} options
    */
-  clearCookie(name, options) {
+  clearCookie (name, options) {
     this.cookie(name, '', { ...options, expires: new Date(0) })
   }
 
@@ -117,7 +121,7 @@ export class Response extends Writable {
     this._uwsRes.cork(() => {
       this._uwsRes.writeStatus(getStatus(this._status))
       for (const [lc, [key, value]] of Object.entries(this._headers)) {
-      // never set content-length as request crashes then
+        // never set content-length as request crashes then
         if (lc === 'content-length') continue
         this._uwsRes.writeHeader(key, value)
       }
@@ -127,25 +131,36 @@ export class Response extends Writable {
   }
 
   /**
-   * drained write to uWs.HttpResponse
-   * @param {string|Buffer} chunk
-   * @returns {boolean} `false` if chunk was not or only partly written
+   * @param {Buffer} chunk
+   * @returns {boolean} `false` if body was not or only partly written
    */
-  write (chunk) {
-    console.log('write', chunk)
-    if (this.destroyed || this.finished) return true
-    this._writeHeaders()
+  _writeBackPressure (chunk) {
     const lastOffset = this._uwsRes.getWriteOffset()
     const drain = this._uwsRes.write(chunk)
     if (!drain) {
-      this._uwsRes.onWritable(offset => {
+      this._readStream && this._readStream.pause()
+      this._uwsRes.onWritable((offset) => {
         const sliced = chunk.slice(offset - lastOffset)
-        const drain = this.write(sliced) // drain === true; chunk is now fully written
-        if (drain) { this.emit('drain') }
-        return drain
+        return this._writeBackPressure(sliced)
       })
+    } else {
+      this._readStream && this._readStream.resume()
     }
     return drain
+  }
+
+  /**
+   * drained write to uWs.HttpResponse
+   * @param {string|Buffer} chunk
+   */
+  write (chunk) {
+    if (this.destroyed || this.finished) return true
+    this._writeHeaders()
+    this._uwsRes.cork(() => {
+      const buf = typeof chunk === 'string' ? Buffer.from(chunk) : chunk
+      this._writeBackPressure(buf)
+    })
+    return true
   }
 
   /**
@@ -168,35 +183,50 @@ export class Response extends Writable {
    */
   // @ts-expect-error
   end (body, closeConnection) {
-    console.log('end', body)
     if (this.destroyed || this.finished) return
-    // no backpressure handling here
     this._writeHeaders()
-    this._uwsRes.end(body, closeConnection)
+    this._uwsRes.cork(() => {
+      // no backpressure handling here
+      this._uwsRes.end(body, closeConnection)
+    })
     super.end()
     this._finish()
   }
 
   /**
+   * @param {Buffer} body
+   * @returns {boolean} `false` if body was not or only partly written
+   */
+  _tryEndBackPressure (body, totalLength) {
+    const lastOffset = this._uwsRes.getWriteOffset()
+    const [drain, done] = this._uwsRes.tryEnd(body, totalLength)
+    if (done) {
+      this._finish()
+      return true
+    }
+    if (!drain) {
+      this._readStream && this._readStream.pause()
+      this._uwsRes.onWritable((offset) => {
+        const sliced = body.slice(offset - lastOffset)
+        return this._tryEndBackPressure(sliced, totalLength)
+      })
+    } else {
+      this._readStream && this._readStream.resume()
+    }
+    return drain
+  }
+
+  /**
    * drained write with end to uWs.HttpResponse
    * @param {string|Buffer} body
-   * @returns {boolean} `false` if body was not or only partly written
    */
   tryEnd (body) {
     if (this.destroyed || this.finished) return true
     this._writeHeaders()
-    const lastOffset = this._uwsRes.getWriteOffset()
-    // @ts-expect-error
-    const [drain] = this._uwsRes.tryEnd(body)
-    if (!drain) {
-      this._uwsRes.onWritable(offset => {
-        const sliced = body.slice(offset - lastOffset)
-        return this.tryEnd(sliced)
-      })
-    } else {
-      this._finish()
-    }
-    return drain
+    this._uwsRes.cork(() => {
+      const buf = typeof body === 'string' ? Buffer.from(body) : body
+      this._tryEndBackPressure(buf, buf.length)
+    })
   }
 
   /**
@@ -206,7 +236,6 @@ export class Response extends Writable {
    * @param {object} [headers]
    */
   send (data, status, headers = {}) {
-    console.log('send', data)
     // @ts-expect-error
     const chunk = data || this.body
     /** @type {Buffer|string} */

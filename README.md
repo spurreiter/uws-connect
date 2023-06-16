@@ -4,9 +4,9 @@ Use connect like middlewares with [uWebSockets.js][].
 
 Provides support for
 
-- connecting connect, express middlewares
+- connect helper for connecting connect, express middlewares
 - body-parser (json, form-urlencoded)
-- nodejs streams for `uWS.HttpRequest` and `uWS.HttpResponse`
+- nodejs streams support for `uWS.HttpRequest` and `uWS.HttpResponse`
   (may not be 100% compliant with nodejs streams)
 - final handler for errors
 
@@ -18,11 +18,11 @@ All parts provided can also be used as single building blocks.
 
 <!-- !toc (omit="uws-connect") -->
 
-* [Installation](#installation)
-* [Usage](#usage)
-* [Contributing](#contributing)
-* [License](#license)
-* [References](#references)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [References](#references)
 
 <!-- toc! -->
 
@@ -84,7 +84,7 @@ app.post('/echo',
 app.listen(9001)
 ```
 
-If you need to better fine tune the performance of your app and don't want to 
+If you need to better fine tune the performance of your app and don't want to
 trade speed...
 
 ```js
@@ -115,15 +115,16 @@ $ cd benchmark
 $ node index.js -d 10 -c 2500 -p 4
 ```
 
-*) Results may vary on your machine.
+\*) Results may vary on your machine.
 
-| Package     |  Version | Requests/s | Latency (ms) | Throughput (Mb) |
-| :---------- | -------: | ---------: | -----------: | --------------: |
-| uws         |  20.14.0 |     162620 |       196.97 |           16.59 |
-| uws-connect |    1.1.2 |     108816 |       245.28 |            9.34 |
-| native      | v18.12.0 |      59968 |       170.29 |            7.83 |
-| restana     |    4.9.6 |      45266 |       310.99 |            5.91 |
-| express     |   4.18.2 |      18462 |       365.99 |            2.41 |
+| Package     | Version | Requests/s | Latency (ms) | Throughput (Mb) |
+| :---------- | ------: | ---------: | -----------: | --------------: |
+| uWebSockets | 20.30.0 |     188939 |        65.23 |           19.28 |
+| uws-connect |         |     163354 |        79.40 |           14.02 |
+| native      | v20.3.0 |      95206 |        70.51 |           12.44 |
+| polka       |   0.5.2 |      84582 |        68.51 |           11.05 |
+| restana     |   4.9.7 |      73406 |        76.23 |            9.59 |
+| express     |  4.18.2 |      24776 |        91.40 |            3.24 |
 
 # Contributing
 
@@ -147,11 +148,10 @@ MIT Licensed
 
 <!-- !ref -->
 
-* [uWebSockets.js][uWebSockets.js]
-* [uWebSockets.js documentation][uWebSockets.js documentation]
+- [uWebSockets.js][uWebSockets.js]
+- [uWebSockets.js documentation][uWebSockets.js documentation]
 
 <!-- ref! -->
-
 
 [uWebSockets.js]: https://github.com/uNetworking/uWebSockets.js
 [uWebSockets.js documentation]: https://unetworking.github.io/uWebSockets.js/generated/index.html

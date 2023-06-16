@@ -12,6 +12,7 @@ export class Response extends Writable {
     _status: number;
     headersSent: boolean;
     finished: boolean;
+    _readStream: import("stream").Readable;
     /**
      * sets response status code
      * @param {number} status
@@ -40,11 +41,6 @@ export class Response extends Writable {
      */
     removeHeader(key: string): void;
     /**
-     * write headers only before end or the first write
-     * @private
-     */
-    private _writeHeaders;
-    /**
      * set cookie
      * @param {string} name
      * @param {string} value
@@ -58,9 +54,18 @@ export class Response extends Writable {
      */
     clearCookie(name: string, options: import('cookie').CookieSerializeOptions): void;
     /**
+     * write headers only before end or the first write
+     * @private
+     */
+    private _writeHeaders;
+    /**
+     * @param {Buffer} chunk
+     * @returns {boolean} `false` if body was not or only partly written
+     */
+    _writeBackPressure(chunk: Buffer): boolean;
+    /**
      * drained write to uWs.HttpResponse
      * @param {string|Buffer} chunk
-     * @returns {boolean} `false` if chunk was not or only partly written
      */
     write(chunk: string | Buffer): boolean;
     /**
@@ -78,11 +83,15 @@ export class Response extends Writable {
      */
     end(body: string | Buffer, closeConnection?: boolean | undefined): void;
     /**
-     * drained write with end to uWs.HttpResponse
-     * @param {string|Buffer} body
+     * @param {Buffer} body
      * @returns {boolean} `false` if body was not or only partly written
      */
-    tryEnd(body: string | Buffer): boolean;
+    _tryEndBackPressure(body: Buffer, totalLength: any): boolean;
+    /**
+     * drained write with end to uWs.HttpResponse
+     * @param {string|Buffer} body
+     */
+    tryEnd(body: string | Buffer): true | undefined;
     /**
      * send a response
      * @param {string|Buffer|object|null|boolean|number} data

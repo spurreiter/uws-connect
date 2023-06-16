@@ -17,18 +17,19 @@
     "checkLeaks": true
   },
   "dependencies": {
-    "autocannon": "^7.10.0",
+    "autocannon": "^7.11.0",
     "cli-table": "^0.3.11",
     "express": "^4.18.2",
-    "hyper-express": "^6.4.11",
+    "hyper-express": "^6.7.1",
     "kleur": "^4.1.5",
-    "minimist": "^1.2.7",
-    "ora": "^6.1.2",
-    "restana": "^4.9.6"
+    "minimist": "^1.2.8",
+    "ora": "^6.3.1",
+    "polka": "^0.5.2",
+    "restana": "^4.9.7"
   },
   "devDependencies": {
-    "mocha": "^10.1.0",
-    "supertest": "^6.3.0"
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
   },
   "engines": {
     "node": ">=8.0.0"

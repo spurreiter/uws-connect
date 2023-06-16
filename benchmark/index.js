@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /* eslint no-console: 0 */
 
+import { platform } from 'os'
 import { fileURLToPath } from 'url'
 import { fork } from 'child_process'
 import autocannon from 'autocannon'
@@ -32,24 +33,22 @@ const shuffle = (array) => {
 let files = shuffle(
   [
     'express.js',
-    'hyper-express.js',
+    platform() === 'darwin' ? undefined : 'hyper-express.js', // not supported on macOS
     'native.js',
+    'polka.js',
     'restana.js',
     'uws-connect.js',
-    'uws.js'
-  ]
+    'uWebSockets.js'
+  ].filter(Boolean)
 )
 
-const filePkgMapper = {
-  'uws.js': 'uWebSockets.js'
-}
-const pathPkgMapper = {
-  'uws-connect': `${__dirname}/../package.json`
+const specifierMap = {
+  uWebSockets: 'uWebSockets.js'
 }
 
 function findPackageJson (specifier, parent = '') {
   const segments = path.resolve(parent, process.cwd(), parent).split(path.sep)
-  const pckg = ['node_modules', specifier, 'package.json']
+  const pckg = ['node_modules', specifierMap[specifier] || specifier, 'package.json']
   while (segments.length) {
     const pckgPath = [...segments, ...pckg].join(path.sep)
     try {
@@ -61,9 +60,9 @@ function findPackageJson (specifier, parent = '') {
 }
 
 const versions = files.reduce((o, file) => {
-  const packge = filePkgMapper[file] || file.replace('.js', '')
+  const packge = file.replace('.js', '')
   try {
-    const pckgPath = pathPkgMapper[packge] || findPackageJson(packge)
+    const pckgPath = findPackageJson(packge)
     const { version } = JSON.parse(fs.readFileSync(pckgPath, 'utf8'))
     o[packge] = o[file] = version
   } catch (e) {
@@ -88,7 +87,7 @@ const cannon = (title = null, duration) =>
         {
           url: argv.u || 'http://localhost:5050/users/alias',
           connections: argv.c || 2500,
-          duration: duration || argv.d || 5,
+          duration: duration || argv.d || 10,
           pipelining: argv.p || 4
         },
         { title }
