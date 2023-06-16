@@ -5,8 +5,8 @@ dependencies:
     specifier: ^0.5.0
     version: 0.5.0
   uWebSockets.js:
-    specifier: git+https://github.com/uNetworking/uWebSockets.js.git#semver:20.25.0
-    version: github.com/uNetworking/uWebSockets.js/e6ecc2102d68d99dc35969b0898fbd201e0f252b
+    specifier: git+https://github.com/uNetworking/uWebSockets.js.git#semver:^20.30.0
+    version: github.com/uNetworking/uWebSockets.js/d39d4181daf5b670d44cbc1b18f8c28c85fd4142
 
 devDependencies:
   '@types/cookie':
@@ -2059,8 +2059,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/uNetworking/uWebSockets.js/e6ecc2102d68d99dc35969b0898fbd201e0f252b:
-    resolution: {tarball: https://codeload.github.com/uNetworking/uWebSockets.js/tar.gz/e6ecc2102d68d99dc35969b0898fbd201e0f252b}
+  github.com/uNetworking/uWebSockets.js/d39d4181daf5b670d44cbc1b18f8c28c85fd4142:
+    resolution: {tarball: https://codeload.github.com/uNetworking/uWebSockets.js/tar.gz/d39d4181daf5b670d44cbc1b18f8c28c85fd4142}
     name: uWebSockets.js
-    version: 20.25.0
+    version: 20.30.0
     dev: false

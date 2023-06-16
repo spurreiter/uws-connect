@@ -2,7 +2,7 @@ import assert from 'assert/strict'
 
 import { App, connect, bodyParser } from '../src/index.js'
 import { fetch } from './support/fetch.js'
-import { getHeaders } from './support/utils.js'
+import { getHeaders, connectionClose } from './support/utils.js'
 
 describe('uws-connect', function () {
   const port = 9001
@@ -20,6 +20,7 @@ describe('uws-connect', function () {
     app.app
       // attributes
       .get('/request', glue(
+        connectionClose,
         (req, res) => {
           const { url, method, headers, cookies } = req
           const { remoteAddress } = req.socket
@@ -27,6 +28,7 @@ describe('uws-connect', function () {
         }
       ))
       .post('/request', glue(
+        connectionClose,
         bodyParser({ limit: 5e3 }),
         (req, res) => {
           const { body } = req
@@ -36,6 +38,7 @@ describe('uws-connect', function () {
         }
       ))
       .get('/number/:number', glue(
+        connectionClose,
         (req, res) => {
           const number = +req.getParameter(0)
           res.send(number)
@@ -44,6 +47,7 @@ describe('uws-connect', function () {
       // final handler
       .get('/none', glue())
       .get('/cookies', glue(
+        connectionClose,
         (req, res) => {
           const { name, value, ...options } = req.query
           if (!value) {
@@ -167,6 +171,7 @@ describe('uws-connect', function () {
     const res = await fetch(`${url}/cookies?name=test&value=100&domain=foo.bar&httpOnly=true`, {})
     assert.equal(res.status, 200)
     assert.deepEqual(getHeaders(res.headers), {
+      connection: 'close',
       'content-length': '0',
       'set-cookie': [
         'test=100; Domain=foo.bar; Path=/; HttpOnly',
@@ -181,6 +186,7 @@ describe('uws-connect', function () {
     const res = await fetch(`${url}/cookies?name=test&path=/login&httpOnly=true`, {})
     assert.equal(res.status, 200)
     assert.deepEqual(getHeaders(res.headers), {
+      connection: 'close',
       'content-length': '0',
       'set-cookie': [
         'test=; Path=/login; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly',

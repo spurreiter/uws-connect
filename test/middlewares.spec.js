@@ -59,7 +59,8 @@ describe('connect compliant middlewares', function () {
       assert.strictEqual(res.status, 204)
       const text = await res.text()
       assert.equal(text, '')
-      assert.deepEqual(getHeaders(res.headers), {
+      const headers = getHeaders(res.headers)
+      assert.deepEqual(headers, {
         connection: 'close',
         'access-control-allow-headers': 'Content-Type',
         'access-control-allow-methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -81,7 +82,8 @@ describe('connect compliant middlewares', function () {
       assert.strictEqual(res.status, 204)
       const text = await res.text()
       assert.equal(text, '')
-      assert.deepEqual(getHeaders(res.headers), {
+      const headers = getHeaders(res.headers)
+      assert.deepEqual(headers, {
         connection: 'close',
         'access-control-allow-headers': 'Content-Type',
         'access-control-allow-methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -98,7 +100,8 @@ describe('connect compliant middlewares', function () {
       assert.strictEqual(res.status, 200)
       const text = await res.text()
       assert.equal(text, 'cors')
-      assert.deepEqual(getHeaders(res.headers), {
+      const headers = getHeaders(res.headers)
+      assert.deepEqual(headers, {
         connection: 'close',
         'access-control-allow-origin': 'http://foo.bar',
         'content-length': '4',

@@ -1,10 +1,10 @@
 import assert from 'assert/strict'
-
 import { App, params } from '../src/index.js'
 import { fetch } from './support/fetch.js'
+import { connectionClose } from './support/utils.js'
 
 describe('params', function () {
-  const port = 9001
+  const port = 9002
   const url = `http://localhost:${port}`
   let app
 
@@ -12,6 +12,7 @@ describe('params', function () {
     app = App()
     app.get('/path/:with/some/:ids',
       params('/path/:with/some/:ids'),
+      connectionClose,
       (req, res) => {
         const { params } = req
         res.send({ params })

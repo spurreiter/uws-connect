@@ -7,3 +7,9 @@ export const getHeaders = (resHeaders) => {
   assert.equal(isDate(date), true)
   return headers
 }
+
+// needed for node@20 which by default uses keepalive=true
+export const connectionClose = (req, res, next) => {
+  res.setHeader('connection', 'close')
+  next()
+}

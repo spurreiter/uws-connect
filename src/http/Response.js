@@ -86,28 +86,12 @@ export class Response extends Writable {
   }
 
   /**
-   * write headers only before end or the first write
-   * @private
-   */
-  _writeHeaders () {
-    if (this.headersSent) return
-    this._uwsRes.writeStatus(getStatus(this._status))
-
-    for (const [lc, [key, value]] of Object.entries(this._headers)) {
-      // never set content-length as request crashes then
-      if (lc === 'content-length') continue
-      this._uwsRes.writeHeader(key, value)
-    }
-    this.headersSent = true
-  }
-
-  /**
    * set cookie
    * @param {string} name
    * @param {string} value
    * @param {import('cookie').CookieSerializeOptions} options
    */
-  cookie (name, value = '', options = {}) {
+  cookie(name, value = '', options = {}) {
     const opts = { ...COOKIE_DEFAULTS, ...options }
     const setCookie = cookie.serialize(name, value, opts)
     const key = `set-cookie--${name}-${opts.path}-${opts.domain || ''}`
@@ -119,8 +103,27 @@ export class Response extends Writable {
    * @param {string} name
    * @param {import('cookie').CookieSerializeOptions} options
    */
-  clearCookie (name, options) {
+  clearCookie(name, options) {
     this.cookie(name, '', { ...options, expires: new Date(0) })
+  }
+
+  /**
+   * write headers only before end or the first write
+   * @private
+   */
+  _writeHeaders () {
+    if (this.headersSent) return
+
+    this._uwsRes.cork(() => {
+      this._uwsRes.writeStatus(getStatus(this._status))
+      for (const [lc, [key, value]] of Object.entries(this._headers)) {
+      // never set content-length as request crashes then
+        if (lc === 'content-length') continue
+        this._uwsRes.writeHeader(key, value)
+      }
+    })
+
+    this.headersSent = true
   }
 
   /**
@@ -129,9 +132,10 @@ export class Response extends Writable {
    * @returns {boolean} `false` if chunk was not or only partly written
    */
   write (chunk) {
+    console.log('write', chunk)
     if (this.destroyed || this.finished) return true
-    const lastOffset = this._uwsRes.getWriteOffset()
     this._writeHeaders()
+    const lastOffset = this._uwsRes.getWriteOffset()
     const drain = this._uwsRes.write(chunk)
     if (!drain) {
       this._uwsRes.onWritable(offset => {
@@ -164,6 +168,7 @@ export class Response extends Writable {
    */
   // @ts-expect-error
   end (body, closeConnection) {
+    console.log('end', body)
     if (this.destroyed || this.finished) return
     // no backpressure handling here
     this._writeHeaders()
@@ -201,6 +206,7 @@ export class Response extends Writable {
    * @param {object} [headers]
    */
   send (data, status, headers = {}) {
+    console.log('send', data)
     // @ts-expect-error
     const chunk = data || this.body
     /** @type {Buffer|string} */

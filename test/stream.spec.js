@@ -3,9 +3,9 @@ import { Transform } from 'stream'
 import assert from 'assert/strict'
 import fs from 'fs'
 import path from 'path'
-
 import { App, connect } from '../src/index.js'
 import { fetch } from './support/fetch.js'
+import { connectionClose } from './support/utils.js'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
@@ -29,18 +29,21 @@ describe('stream', function () {
       // streaming
       .post('/echo', glue(
         // stream(),
+        connectionClose,
         (req, res) => {
           req.pipe(res)
         }
       ))
       .post('/transform', glue(
         // stream(),
+        connectionClose,
         (req, res) => {
           req.pipe(transform).pipe(res)
         }
       ))
       .get('/text.txt', glue(
         // stream(),
+        connectionClose,
         (req, res) => {
           res.setHeader('content-type', 'text/plain')
           fs.createReadStream(path.resolve(__dirname, 'static/text.txt')).pipe(res)

@@ -3,6 +3,7 @@ import assert from 'assert/strict'
 import { App, logRequest } from '../src/index.js'
 import { log } from '../src/utils/log.js'
 import { fetch } from './support/fetch.js'
+import { connectionClose } from './support/utils.js'
 
 describe('logRequest', function () {
   const port = 9001
@@ -12,6 +13,7 @@ describe('logRequest', function () {
   before(async function () {
     app = App()
     app.any('/log/*',
+      connectionClose,
       logRequest(log),
       (req, res) => {
         res.end('log it')
