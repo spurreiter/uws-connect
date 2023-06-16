@@ -9,7 +9,9 @@
     "moduleResolution": "node",
     "noImplicitAny": false,
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "emitDeclarationOnly": true,
+    "noEmitOnError": true
   },
   "include": [
     "**/*.js"

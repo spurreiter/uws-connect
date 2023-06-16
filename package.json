@@ -1,6 +1,6 @@
 {
   "name": "uws-connect",
-  "version": "1.1.4",
+  "version": "1.1.5-0",
   "description": "Use connect like middlewares with uWebSockets.js",
   "keywords": [
     "uws",
@@ -45,7 +45,7 @@
     "lint": "eslint --ext .js --fix .",
     "start": "node src/server.js",
     "test": "c8 -r html -r text mocha",
-    "types": "rm -r types; tsc --emitDeclarationOnly true --noEmitOnError && cp src/*.d.ts types"
+    "types": "rm -r types; tsc && cp src/*.d.ts types"
   },
   "mocha": {
     "exit": true,
