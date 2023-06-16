@@ -7,7 +7,7 @@ export function parse (text) {
   const params = new URLSearchParams(text)
   const body = {}
   for (const [name, value] of params.entries()) {
-    if (body[name]) {
+    if (body[name]) { // filters for empty string!
       Array.isArray(body[name])
         ? body[name].push(value)
         : (body[name] = [body[name], value])

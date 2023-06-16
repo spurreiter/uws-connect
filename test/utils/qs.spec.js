@@ -40,4 +40,12 @@ describe('utils/qs', function () {
   it('doesn\'t produce empty keys', function () {
     deepEqual(qs.parse('_r=1&'), { _r: '1' })
   })
+
+  it('filters empty string', function () {
+    deepEqual(qs.parse('r=&r=1'), { r: '1' })
+  })
+
+  it('adds empty string to array', function () {
+    deepEqual(qs.parse('r=1&r='), { r: ['1', ''] })
+  })
 })
