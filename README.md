@@ -40,22 +40,28 @@ import { Transform } from 'stream'
 
 const app = App()
 
+app.use((req, res, next) => { // a simple logging mw applied to all routes
+  const { method, url } = req
+  console.log('%s %s', method, url)
+  next()
+})
 app.get('/',
   // a connect like middleware
   (req, res, next) => {
     next()
-  },
+    },
   // async middleware (no need for `next()` or `try {} catch (err) {}`)
   async (req, res) => {
-    await something()
+    res.body = await something()
   },
   (req, res) => {
-    res.end('ok')
+    res.end(res.body)
   }
 )
 app.put('/users/:user',
   // get `req.params` compatibility
-  params('/users/:user'), // NOTE: use the same route as the router here!
+  // NOTE: use the same route as the router here!
+  params('/users/:user'),
   // does json or form body parsing.
   bodyParser({ limit: 100000 }),
   (req, res) => {
@@ -64,7 +70,7 @@ app.put('/users/:user',
     res.send({
       params: req.params, // from `params()` middleware
       body: req.body,     // from `bodyParser()` middleware
-    }) 
+    })
   }
 )
 
@@ -76,36 +82,36 @@ const transform = new Transform({
   }
 })
 app.post('/echo',
-  (req, res) => {
-    req.pipe(transform).pipe(res)
-  }
+  (req, res) => { req.pipe(transform).pipe(res) }
 )
 
 app.listen(9001)
 ```
 
 If you need to better fine tune the performance of your app and don't want to
-trade speed...
+trade speed, use `glue(...handlers)` for connecting middlewares.
 
 ```js
 // same as `import uWs from 'uWebSockets.js'`
 import { uWS, connect } from 'uws-connect'
 import cors from 'cors'
-const uapp = uWS.App()
+const uwsApp = uWS.App()
 
 // just uWS, as fast as fast can be
-uapp.get('/', (response, request) => response.end('done'))
+// NOTE: (response, request) for uWS handler
+uwsApp.get('/', (response, request) => response.end('done'))
 
 // use some routes with connect middlewares (like cors)
+// NOTE: glue() uses express (req, res, next) handlers!
 const _cors = cors()
 const glue = connect()
-uapp.options('/*', glue(_cors))
-uapp.get('/with-cors', glue(
+uwsApp.options('/*', glue(_cors))
+uwsApp.get('/with-cors', glue(
   _cors,
   (req, res) => res.end('with cors'))
 )
 
-uapp.listen(9001, () => {})
+uwsApp.listen(9001, () => {})
 ```
 
 # Benchmarks
@@ -120,7 +126,7 @@ $ node index.js -d 10 -c 2500 -p 4
 | Package     | Version | Requests/s | Latency (ms) | Throughput (Mb) |
 | :---------- | ------: | ---------: | -----------: | --------------: |
 | uWebSockets | 20.30.0 |     188939 |        65.23 |           19.28 |
-| uws-connect |         |     163354 |        79.40 |           14.02 |
+| uws-connect |   1.1.5 |     163354 |        79.40 |           14.02 |
 | native      | v20.3.0 |      95206 |        70.51 |           12.44 |
 | polka       |   0.5.2 |      84582 |        68.51 |           11.05 |
 | restana     |   4.9.7 |      73406 |        76.23 |            9.59 |
@@ -131,12 +137,12 @@ $ node index.js -d 10 -c 2500 -p 4
 Your help is appreciated. File an issue and fork this project to contribute with
 your ideas.
 
-Please follow the minimalistic approach as choosen here. Keep things simple.
+Please follow the minimalistic approach as chosen here. Keep things simple.
 
 If you contribute code to this project, you are implicitly allowing your code to
 be distributed under the MIT license. You are also implicitly verifying that all
 code is your original work or correctly attributed with the source of its origin
-and licence.
+and license.
 
 The Code-of-Conduct is [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
 

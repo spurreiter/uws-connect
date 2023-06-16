@@ -28,27 +28,29 @@ export interface App {
   listen(port: number, options: uWS.ListenOptions) : Promise<uWS.us_listen_socket|false>;
   /** Close app */
   close(): Promise<void>;
-  /** Registers an HTTP GET handler matching specified URL pattern. */
+  /** Registers pre-handler for all following HTTP handlers */
+  use(...handlers: typeof Middleware[]) : App;
+  /** Registers an HTTP GET handlers matching specified URL pattern. */
   get(pattern: string, ...handlers: typeof Middleware[]) : App;
-  /** Registers an HTTP POST handler matching specified URL pattern. */
+  /** Registers an HTTP POST handlers matching specified URL pattern. */
   post(pattern: string, ...handlers: typeof Middleware[]) : App;
-  /** Registers an HTTP OPTIONS handler matching specified URL pattern. */
+  /** Registers an HTTP OPTIONS handlers matching specified URL pattern. */
   options(pattern: string, ...handlers: typeof Middleware[]) : App;
-  /** Registers an HTTP DELETE handler matching specified URL pattern. */
+  /** Registers an HTTP DELETE handlers matching specified URL pattern. */
   del(pattern: string, ...handlers: typeof Middleware[]) : App;
-  /** Registers an HTTP PATCH handler matching specified URL pattern. */
+  /** Registers an HTTP PATCH handlers matching specified URL pattern. */
   patch(pattern: string, ...handlers: typeof Middleware[]) : App;
-  /** Registers an HTTP PUT handler matching specified URL pattern. */
+  /** Registers an HTTP PUT handlers matching specified URL pattern. */
   put(pattern: string, ...handlers: typeof Middleware[]) : App;
-  /** Registers an HTTP HEAD handler matching specified URL pattern. */
+  /** Registers an HTTP HEAD handlers matching specified URL pattern. */
   head(pattern: string, ...handlers: typeof Middleware[]) : App;
-  /** Registers an HTTP CONNECT handler matching specified URL pattern. */
+  /** Registers an HTTP CONNECT handlers matching specified URL pattern. */
   connect(pattern: string, ...handlers: typeof Middleware[]) : App;
-  /** Registers an HTTP TRACE handler matching specified URL pattern. */
+  /** Registers an HTTP TRACE handlers matching specified URL pattern. */
   trace(pattern: string, ...handlers: typeof Middleware[]) : App;
-  /** Registers an HTTP handler matching specified URL pattern on any HTTP method. */
+  /** Registers an HTTP handlers matching specified URL pattern on any HTTP method. */
   any(pattern: string, ...handlers: typeof Middleware[]) : App;
-  /** Registers a handler matching specified URL pattern where WebSocket upgrade requests are caught. */
+  /** Registers a handlers matching specified URL pattern where WebSocket upgrade requests are caught. */
   ws(pattern: uWS.RecognizedString, behavior: uWS.WebSocketBehavior<any>) : App;
   /** Publishes a message under topic, for all WebSockets under this app. See WebSocket.publish. */
   publish(topic: uWS.RecognizedString, message: uWS.RecognizedString, isBinary?: boolean, compress?: boolean) : boolean;

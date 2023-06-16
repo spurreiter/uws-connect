@@ -26,17 +26,15 @@ describe('connect compliant middlewares', function () {
     // }
 
     app = new App()
+    app.use(connectionClose)
     app.options('/*',
-      connectionClose,
       _cors
     )
     app.get('/cors',
-      connectionClose,
       _cors,
       (req, res) => res.end('cors')
     )
     app.get('/static/*',
-      connectionClose,
       serveStatic(path.resolve(__dirname)) // contains a `/static` folder
     )
     await app.listen(port)

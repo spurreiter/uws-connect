@@ -5,12 +5,12 @@ import uWS from 'uWebSockets.js'
 import { connect } from './connect.js'
 import { nap } from './utils/nap.js'
 
-/** @typedef {import('./types.d').AppOptions} AppOptions */
+/** @typedef {import('./types').AppOptions} AppOptions */
 
 /**
  * A uWs App wrapper for connect compatible middlewares
  * @param {AppOptions} [options]
- * @returns {App}
+ * @returns {import('./types').App}
  */
 // @ts-ignore
 export function App (options) {
@@ -26,6 +26,7 @@ export function App (options) {
     ...opts
   } = options || {}
 
+  let preHandlers = []
   let listenSocket
   const app = isSsl ? uWS.SSLApp(opts) : uWS.App(opts)
   this.app = app
@@ -73,13 +74,18 @@ export function App (options) {
     await nap(50)
   }
 
+  this.use = (...handlers) => {
+    preHandlers = [...preHandlers, ...handlers]
+    return this
+  }
+
   const methods = ['get', 'post', 'options', 'del', 'patch', 'put', 'head',
     'connect', 'trace', 'any']
   // @ts-ignore
   const glue = connect({ finalHandler, isSsl })
   for (const method of methods) {
     this[method] = (pattern, ...handlers) => {
-      app[method](pattern, glue(...handlers))
+      app[method](pattern, glue(...preHandlers, ...handlers))
       return this
     }
   }

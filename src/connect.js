@@ -24,6 +24,7 @@ export const connect = (options = {}) => (...handlers) => {
 
   const stack = handlers
     .flat(Infinity)
+    .filter(Boolean)
     .map(fn => {
       if (typeof fn !== 'function') throw new Error('need function')
       const isAsync = isAsyncFunction(fn)
