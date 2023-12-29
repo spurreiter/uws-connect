@@ -1,6 +1,6 @@
 {
   "name": "uws-connect",
-  "version": "1.2.2-0",
+  "version": "1.2.2",
   "description": "Use connect like middlewares with uWebSockets.js",
   "keywords": [
     "uws",
