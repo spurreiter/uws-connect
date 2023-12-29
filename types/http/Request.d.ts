@@ -22,7 +22,7 @@ export class Request extends Readable {
     method: string;
     connection: {};
     socket: {};
-    set url(arg: any);
+    set url(newUrl: any);
     /**
      * request url
      */

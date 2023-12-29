@@ -52,25 +52,25 @@
     "recursive": true
   },
   "dependencies": {
-    "cookie": "^0.5.0",
-    "uWebSockets.js": "git+https://github.com/uNetworking/uWebSockets.js.git#semver:^20.32.0"
+    "cookie": "^0.6.0",
+    "uWebSockets.js": "git+https://github.com/uNetworking/uWebSockets.js.git#semver:^20.38.0"
   },
   "devDependencies": {
-    "@types/cookie": "^0.5.3",
-    "@types/node": "^20.8.7",
+    "@types/cookie": "^0.6.0",
+    "@types/node": "^20.10.5",
     "c8": "^8.0.1",
     "cors": "^2.8.5",
-    "eslint": "^8.52.0",
+    "eslint": "^8.56.0",
     "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-n": "^16.2.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.0",
     "eslint-plugin-promise": "^6.1.1",
     "mocha": "^10.2.0",
     "serve-static": "^1.15.0",
     "supertest": "^6.3.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   },
   "engines": {
-    "node": ">=16 <=20"
+    "node": ">=16 <=21"
   }
 }

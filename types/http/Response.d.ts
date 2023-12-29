@@ -17,7 +17,7 @@ export class Response extends Writable {
      * sets response status code
      * @param {number} status
      */
-    set statusCode(arg: number);
+    set statusCode(status: number);
     /**
      * set response status code
      * @returns {number}
