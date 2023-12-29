@@ -29,18 +29,17 @@ const shuffle = (array) => {
   return array
 }
 
-/** files under test */
-let files = shuffle(
-  [
-    'express.js',
-    platform() === 'darwin' ? undefined : 'hyper-express.js', // not supported on macOS
-    'native.js',
-    'polka.js',
-    'restana.js',
-    'uws-connect.js',
-    'uWebSockets.js'
-  ].filter(Boolean)
-)
+export const filesUnderTest = [
+  'express.js',
+  platform() === 'darwin' ? undefined : 'hyper-express.js', // not supported on macOS
+  'native.js',
+  'polka.js',
+  'restana.js',
+  'uws-connect.js',
+  'uWebSockets.js'
+].filter(Boolean)
+
+let files = shuffle(filesUnderTest)
 
 const specifierMap = {
   uWebSockets: 'uWebSockets.js'
@@ -138,33 +137,37 @@ const benchmark = async (results) => {
   })
 }
 
-benchmark([]).then((results) => {
-  const table = new Table({
-    head: ['', 'Requests/s', 'Latency (ms)', 'Throughput (Mb)']
-  })
-  const md = new MdTable(
-    ['Package', 'Version ', 'Requests/s', 'Latency (ms)', 'Throughput (Mb)'],
-    ['l14', 'r8', 'r10', 'r12', 'r13']
-  )
+const __filename = fileURLToPath(import.meta.url)
 
-  results.forEach((result) => {
-    if (result) {
-      table.push([
-        kleur.blue(result.title.replace('.js', '')),
-        result.requests.average,
-        result.latency.average,
-        (result.throughput.average / 1024 / 1024).toFixed(2)
-      ])
-      md.push([
-        result.title.replace('.js', ''),
-        versions[result.title],
-        result.requests.average.toFixed(0),
-        result.latency.average.toFixed(2),
-        (result.throughput.average / 1024 / 1024).toFixed(2)
-      ])
-    }
-  })
+if (process.argv[1] === __filename) {
+  benchmark([]).then((results) => {
+    const table = new Table({
+      head: ['', 'Requests/s', 'Latency (ms)', 'Throughput (Mb)']
+    })
+    const md = new MdTable(
+      ['Package', 'Version ', 'Requests/s', 'Latency (ms)', 'Throughput (Mb)'],
+      ['l14', 'r8', 'r10', 'r12', 'r13']
+    )
 
-  // console.log(table.toString())
-  console.log(md.toString())
-})
+    results.forEach((result) => {
+      if (result) {
+        table.push([
+          kleur.blue(result.title.replace('.js', '')),
+          result.requests.average,
+          result.latency.average,
+          (result.throughput.average / 1024 / 1024).toFixed(2)
+        ])
+        md.push([
+          result.title.replace('.js', ''),
+          versions[result.title],
+          result.requests.average.toFixed(0),
+          result.latency.average.toFixed(2),
+          (result.throughput.average / 1024 / 1024).toFixed(2)
+        ])
+      }
+    })
+
+    // console.log(table.toString())
+    console.log(md.toString())
+  })
+}
