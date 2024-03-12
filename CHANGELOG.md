@@ -1,3 +1,7 @@
+# 1.2.3 (2023-12-29)
+
+- docs: update benchmark results (#7ee88b1)
+
 # 1.2.2 (2023-12-29)
 
 - chore: bump dependencies (#f76c8ad)
