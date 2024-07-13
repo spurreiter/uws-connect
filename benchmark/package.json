@@ -19,17 +19,17 @@
   "dependencies": {
     "autocannon": "^7.15.0",
     "cli-table": "^0.3.11",
-    "express": "^4.18.3",
-    "hyper-express": "^6.14.12",
+    "express": "^4.19.2",
+    "hyper-express": "^6.16.4",
     "kleur": "^4.1.5",
     "minimist": "^1.2.8",
     "ora": "^7.0.1",
     "polka": "^0.5.2",
-    "restana": "^4.9.7"
+    "restana": "^4.9.9"
   },
   "devDependencies": {
-    "mocha": "^10.3.0",
-    "supertest": "^6.3.4"
+    "mocha": "^10.6.0",
+    "supertest": "^7.0.0"
   },
   "engines": {
     "node": ">=8.0.0"

@@ -80,7 +80,7 @@ const versions = files.reduce(
     return o
   },
   {
-    'native.js': process.version
+    'native.js': process.versions.node
   }
 )
 
