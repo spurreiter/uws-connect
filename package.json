@@ -1,6 +1,6 @@
 {
   "name": "uws-connect",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Use connect like middlewares with uWebSockets.js",
   "keywords": [
     "uws",
@@ -40,9 +40,11 @@
     "types"
   ],
   "scripts": {
-    "ci": "npm run lint && npm t && npm run types",
+    "ci": "npm-run-all lint test types",
     "dev": "nodemon src/server.js",
-    "lint": "prettier -w **/*.js && eslint",
+    "lint": "npm-run-all lint:pretty lint:eslint",
+    "lint:eslint": "eslint",
+    "lint:pretty": "prettier -w **/*.js ",
     "start": "node src/server.js",
     "test": "c8 -r html -r text mocha",
     "types": "rm -r types; tsc && cp src/*.d.ts types"
@@ -64,12 +66,13 @@
     "eslint": "9.x",
     "globals": "^15.8.0",
     "mocha": "^10.6.0",
+    "npm-run-all2": "^6.2.2",
     "prettier": "^3.3.2",
     "serve-static": "^1.15.0",
     "supertest": "^6.3.4",
     "typescript": "^5.5.3"
   },
   "engines": {
-    "node": ">=16 <=21"
+    "node": ">=18 <=22"
   }
 }

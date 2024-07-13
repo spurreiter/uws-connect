@@ -1,3 +1,9 @@
+# 1.2.4 (2024-07-13)
+
+- chore: update benchmark (#2cd517d)
+- test: websocket test for node >= 22 (#ec554c0)
+- chore: use prettier and eslint@9 (#ed13978)
+
 # 1.2.3 (2024-03-12)
 
 - chore: bump dependencies (#b586572)
