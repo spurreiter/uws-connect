@@ -9,7 +9,8 @@ describe('http/Request', function () {
       res.send(req.query)
     })
 
-    return request(app).get('/home/user?a=0&b=bla&a=1&a=2')
+    return request(app)
+      .get('/home/user?a=0&b=bla&a=1&a=2')
       .then(({ status, headers, body }) => {
         assert.equal(status, 200)
         assert.equal(headers['content-type'], 'application/json; charset=utf-8')

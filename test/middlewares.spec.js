@@ -27,14 +27,10 @@ describe('connect compliant middlewares', function () {
 
     app = new App()
     app.use(connectionClose)
-    app.options('/*',
-      _cors
-    )
-    app.get('/cors',
-      _cors,
-      (req, res) => res.end('cors')
-    )
-    app.get('/static/*',
+    app.options('/*', _cors)
+    app.get('/cors', _cors, (req, res) => res.end('cors'))
+    app.get(
+      '/static/*',
       serveStatic(path.resolve(__dirname)) // contains a `/static` folder
     )
     await app.listen(port)
@@ -110,8 +106,7 @@ describe('connect compliant middlewares', function () {
 
   describe('serveStatic', function () {
     it('shall serve text.txt', async function () {
-      const res = await fetch(`${url}/static/text.txt`, {
-      })
+      const res = await fetch(`${url}/static/text.txt`, {})
       assert.strictEqual(res.status, 200)
       const text = await res.text()
       assert.equal(text, 'serving...')

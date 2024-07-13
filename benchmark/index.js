@@ -45,33 +45,44 @@ const specifierMap = {
   uWebSockets: 'uWebSockets.js'
 }
 
-function findPackageJson (specifier, parent = '') {
+function findPackageJson(specifier, parent = '') {
   const segments = path.resolve(parent, process.cwd(), parent).split(path.sep)
-  const pckg = ['node_modules', specifierMap[specifier] || specifier, 'package.json']
+  const pckg = [
+    'node_modules',
+    specifierMap[specifier] || specifier,
+    'package.json'
+  ]
   while (segments.length) {
     const pckgPath = [...segments, ...pckg].join(path.sep)
     try {
       fs.statSync(pckgPath)
       return pckgPath
-    } catch (e) { }
+      // eslint-disable-next-line no-unused-vars
+    } catch (e) {
+      // noop
+    }
     segments.pop()
   }
 }
 
-const versions = files.reduce((o, file) => {
-  const packge = file.replace('.js', '')
-  try {
-    const pckgPath = findPackageJson(packge)
-    const { version } = JSON.parse(fs.readFileSync(pckgPath, 'utf8'))
-    o[packge] = o[file] = version
-  } catch (e) {
-    o[file] = o[file] || ''
-    o[packge] = o[packge] || ''
+const versions = files.reduce(
+  (o, file) => {
+    const packge = file.replace('.js', '')
+    try {
+      const pckgPath = findPackageJson(packge)
+      const { version } = JSON.parse(fs.readFileSync(pckgPath, 'utf8'))
+      o[packge] = o[file] = version
+      // eslint-disable-next-line no-unused-vars
+    } catch (e) {
+      o[file] = o[file] || ''
+      o[packge] = o[packge] || ''
+    }
+    return o
+  },
+  {
+    'native.js': process.version
   }
-  return o
-}, {
-  'native.js': process.version
-})
+)
 
 const argv = minimist(process.argv.slice(2))
 if (argv.f) {
@@ -95,7 +106,7 @@ const cannon = (title = null, duration) =>
     )
   })
 
-async function run (file) {
+async function run(file) {
   if (argv.o && argv.o !== file) {
     return null
   }

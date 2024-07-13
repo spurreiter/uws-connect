@@ -17,7 +17,7 @@ describe('stream', function () {
   before(async function () {
     const glue = connect()
     const transform = new Transform({
-      transform (chunk, enc, cb) {
+      transform(chunk, enc, cb) {
         const _chunk = chunk.toString().replace(/[2468]/g, '')
         this.push(_chunk)
         cb()
@@ -27,28 +27,39 @@ describe('stream', function () {
     app = App()
     app.app
       // streaming
-      .post('/echo', glue(
-        // stream(),
-        connectionClose,
-        (req, res) => {
-          req.pipe(res)
-        }
-      ))
-      .post('/transform', glue(
-        // stream(),
-        connectionClose,
-        (req, res) => {
-          req.pipe(transform).pipe(res)
-        }
-      ))
-      .get('/text.txt', glue(
-        // stream(),
-        connectionClose,
-        (req, res) => {
-          res.setHeader('content-type', 'text/plain')
-          fs.createReadStream(path.resolve(__dirname, 'static/text.txt')).pipe(res)
-        }
-      ))
+      .post(
+        '/echo',
+        glue(
+          // stream(),
+          connectionClose,
+          (req, res) => {
+            req.pipe(res)
+          }
+        )
+      )
+      .post(
+        '/transform',
+        glue(
+          // stream(),
+          connectionClose,
+          (req, res) => {
+            req.pipe(transform).pipe(res)
+          }
+        )
+      )
+      .get(
+        '/text.txt',
+        glue(
+          // stream(),
+          connectionClose,
+          (req, res) => {
+            res.setHeader('content-type', 'text/plain')
+            fs.createReadStream(
+              path.resolve(__dirname, 'static/text.txt')
+            ).pipe(res)
+          }
+        )
+      )
 
     await app.listen(port)
   })
@@ -58,7 +69,10 @@ describe('stream', function () {
   })
 
   it('shall echo stream', async function () {
-    const body = new Array(6000).fill('').map((_, i) => i % 10).join('')
+    const body = new Array(6000)
+      .fill('')
+      .map((_, i) => i % 10)
+      .join('')
     const res = await fetch(`${url}/echo`, {
       method: 'POST',
       body
@@ -69,7 +83,10 @@ describe('stream', function () {
   })
 
   it('shall transform stream', async function () {
-    const body = new Array(6000).fill('').map((_, i) => i % 10).join('')
+    const body = new Array(6000)
+      .fill('')
+      .map((_, i) => i % 10)
+      .join('')
     const res = await fetch(`${url}/transform`, {
       method: 'POST',
       body

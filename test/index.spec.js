@@ -19,36 +19,37 @@ describe('uws-connect', function () {
     app = App()
     app.app
       // attributes
-      .get('/request', glue(
-        connectionClose,
-        (req, res) => {
+      .get(
+        '/request',
+        glue(connectionClose, (req, res) => {
           const { url, method, headers, cookies } = req
           const { remoteAddress } = req.socket
-          res.end(JSON.stringify({ url, method, headers, cookies, remoteAddress }))
-        }
-      ))
-      .post('/request', glue(
-        connectionClose,
-        bodyParser({ limit: 5e3 }),
-        (req, res) => {
+          res.end(
+            JSON.stringify({ url, method, headers, cookies, remoteAddress })
+          )
+        })
+      )
+      .post(
+        '/request',
+        glue(connectionClose, bodyParser({ limit: 5e3 }), (req, res) => {
           const { body } = req
           res.setHeader('foo', 'bar')
           res.removeHeader('foo')
           res.send(JSON.stringify(body), 200, { foo: 'bar' })
-        }
-      ))
-      .get('/number/:number', glue(
-        connectionClose,
-        (req, res) => {
+        })
+      )
+      .get(
+        '/number/:number',
+        glue(connectionClose, (req, res) => {
           const number = +req.getParameter(0)
           res.send(number)
-        }
-      ))
+        })
+      )
       // final handler
       .get('/none', glue())
-      .get('/cookies', glue(
-        connectionClose,
-        (req, res) => {
+      .get(
+        '/cookies',
+        glue(connectionClose, (req, res) => {
           const { name, value, ...options } = req.query
           if (!value) {
             res.clearCookie(name, options)
@@ -57,8 +58,8 @@ describe('uws-connect', function () {
           }
           res.cookie('foo', 'bar')
           res.end()
-        }
-      ))
+        })
+      )
     await app.listen(port)
   })
 
@@ -107,7 +108,7 @@ describe('uws-connect', function () {
     assert.deepEqual(body, { test: 123, foo: 'bar' })
   })
 
-  it('shall fail to parse json body', async function () {
+  it('shall fail to parse json body (logs error to console)', async function () {
     const res = await fetch(`${url}/request`, {
       method: 'POST',
       body: 'test=123&foo=bar&test=abc&abc=true',
@@ -129,7 +130,7 @@ describe('uws-connect', function () {
     assert.deepEqual(body, { test: ['123', 'abc'], foo: 'bar', abc: 'true' })
   })
 
-  it('max. content length exceeded', async function () {
+  it('max. content length exceeded (logs error to console)', async function () {
     const res = await fetch(`${url}/request`, {
       method: 'POST',
       body: new Array(6000).fill('1').join(''),
@@ -137,10 +138,13 @@ describe('uws-connect', function () {
     })
     assert.equal(res.status, 413)
     const { message, status } = await res.json()
-    assert.deepEqual({ message, status }, {
-      message: 'err_limit',
-      status: 413
-    })
+    assert.deepEqual(
+      { message, status },
+      {
+        message: 'err_limit',
+        status: 413
+      }
+    )
   })
 
   it('return a number', async function () {
@@ -161,14 +165,20 @@ describe('uws-connect', function () {
     const res = await fetch(`${url}/none`, {})
     assert.equal(res.status, 404)
     const { message, status } = await res.json()
-    assert.deepEqual({ message, status }, {
-      message: 'Not Found',
-      status: 404
-    })
+    assert.deepEqual(
+      { message, status },
+      {
+        message: 'Not Found',
+        status: 404
+      }
+    )
   })
 
   it('set cookies', async function () {
-    const res = await fetch(`${url}/cookies?name=test&value=100&domain=foo.bar&httpOnly=true`, {})
+    const res = await fetch(
+      `${url}/cookies?name=test&value=100&domain=foo.bar&httpOnly=true`,
+      {}
+    )
     assert.equal(res.status, 200)
     assert.deepEqual(getHeaders(res.headers), {
       connection: 'close',
@@ -183,7 +193,10 @@ describe('uws-connect', function () {
   })
 
   it('clear cookie', async function () {
-    const res = await fetch(`${url}/cookies?name=test&path=/login&httpOnly=true`, {})
+    const res = await fetch(
+      `${url}/cookies?name=test&path=/login&httpOnly=true`,
+      {}
+    )
     assert.equal(res.status, 200)
     assert.deepEqual(getHeaders(res.headers), {
       connection: 'close',

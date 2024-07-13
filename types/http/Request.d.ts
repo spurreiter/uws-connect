@@ -1,4 +1,3 @@
-/// <reference types="node" />
 /** @typedef {import('node:stream').ReadableOptions} ReadableOptions */
 /** @typedef {import('uWebSockets.js').HttpRequest} uWs.HttpRequest */
 /** @typedef {import('uWebSockets.js').HttpResponse} uWs.HttpResponse */
@@ -18,7 +17,7 @@ export class Request extends Readable {
     headers: {};
     params: {};
     /** @type {'http'|'https'} */
-    protocol: 'http' | 'https';
+    protocol: "http" | "https";
     method: string;
     connection: {};
     socket: {};
@@ -41,7 +40,7 @@ export class Request extends Readable {
      * @returns {object}
      */
     get cookies(): any;
-    _read(size: any): void;
+    _read(_size: any): void;
     /**
      * pauses stream
      */
@@ -57,10 +56,10 @@ export class Request extends Readable {
      */
     getParameter(index: number): string;
 }
-export type ReadableOptions = import('node:stream').ReadableOptions;
+export type ReadableOptions = import("node:stream").ReadableOptions;
 export namespace uWs {
-    type HttpRequest = import('uWebSockets.js').HttpRequest;
-    type HttpResponse = import('uWebSockets.js').HttpResponse;
+    type HttpRequest = import("uWebSockets.js").HttpRequest;
+    type HttpResponse = import("uWebSockets.js").HttpResponse;
 }
 export type ReadableOptionsExt = ReadableOptions;
 import { Readable } from 'stream';

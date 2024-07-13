@@ -4,7 +4,7 @@ const set = (item) => (req, res, next) => {
   res.locals = item
   next()
 }
-const userId = (req, res, next) => {
+const userId = (req, res, _next) => {
   res.end(`User ${req.params.id} ${res.locals}`)
 }
 

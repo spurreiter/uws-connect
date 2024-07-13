@@ -13,11 +13,7 @@ export const logRequest = (log) => (req, res, next) => {
     const { method, url } = req
     const status = res.statusCode
     const userAgent = req.headers?.['user-agent']
-    const level = status < 400
-      ? 'info'
-      : status < 500
-        ? 'warn'
-        : 'error'
+    const level = status < 400 ? 'info' : status < 500 ? 'warn' : 'error'
     log[level]('%j', { status, method, url, userAgent, ms })
   })
 

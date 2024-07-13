@@ -10,7 +10,8 @@ describe('params', function () {
 
   before(async function () {
     app = App()
-    app.get('/path/:with/some/:ids',
+    app.get(
+      '/path/:with/some/:ids',
       params('/path/:with/some/:ids'),
       connectionClose,
       (req, res) => {

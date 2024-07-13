@@ -42,7 +42,7 @@
   "scripts": {
     "ci": "npm run lint && npm t && npm run types",
     "dev": "nodemon src/server.js",
-    "lint": "eslint --ext .js --fix .",
+    "lint": "prettier -w **/*.js && eslint",
     "start": "node src/server.js",
     "test": "c8 -r html -r text mocha",
     "types": "rm -r types; tsc && cp src/*.d.ts types"
@@ -53,22 +53,21 @@
   },
   "dependencies": {
     "cookie": "^0.6.0",
-    "uWebSockets.js": "git+https://github.com/uNetworking/uWebSockets.js.git#semver:^20.42.0"
+    "uWebSockets.js": "git+https://github.com/uNetworking/uWebSockets.js.git#semver:^20.44.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.7.0",
     "@types/cookie": "^0.6.0",
-    "@types/node": "^20.11.26",
-    "c8": "^9.1.0",
+    "@types/node": "^20.14.10",
+    "c8": "^10.1.2",
     "cors": "^2.8.5",
-    "eslint": "^8.57.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.1.1",
-    "mocha": "^10.3.0",
+    "eslint": "9.x",
+    "globals": "^15.8.0",
+    "mocha": "^10.6.0",
+    "prettier": "^3.3.2",
     "serve-static": "^1.15.0",
     "supertest": "^6.3.4",
-    "typescript": "^5.4.2"
+    "typescript": "^5.5.3"
   },
   "engines": {
     "node": ">=16 <=21"

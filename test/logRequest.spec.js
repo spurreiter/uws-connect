@@ -12,13 +12,9 @@ describe('logRequest', function () {
 
   before(async function () {
     app = App()
-    app.any('/log/*',
-      connectionClose,
-      logRequest(log),
-      (req, res) => {
-        res.end('log it')
-      }
-    )
+    app.any('/log/*', connectionClose, logRequest(log), (req, res) => {
+      res.end('log it')
+    })
 
     await app.listen(port)
   })

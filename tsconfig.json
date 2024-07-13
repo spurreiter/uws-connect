@@ -14,7 +14,7 @@
     "noEmitOnError": true
   },
   "include": [
-    "**/*.js"
+    "src/*.js"
   ],
   "exclude": [
     "bin",

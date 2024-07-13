@@ -10,11 +10,16 @@ describe('http/Response', function () {
         res.send({ foo: 'bar' })
       })
 
-      return request(app).get('/').then(({ status, headers, body }) => {
-        assert.equal(status, 200)
-        assert.equal(headers['content-type'], 'application/json; charset=utf-8')
-        assert.deepEqual(body, { foo: 'bar' })
-      })
+      return request(app)
+        .get('/')
+        .then(({ status, headers, body }) => {
+          assert.equal(status, 200)
+          assert.equal(
+            headers['content-type'],
+            'application/json; charset=utf-8'
+          )
+          assert.deepEqual(body, { foo: 'bar' })
+        })
     })
 
     it('shall send undefined with status 201', function () {
@@ -24,11 +29,13 @@ describe('http/Response', function () {
         res.send()
       })
 
-      return request(app).get('/').then(({ status, headers, text }) => {
-        assert.equal(status, 201)
-        assert.equal(headers['content-length'], '0')
-        assert.equal(text, '')
-      })
+      return request(app)
+        .get('/')
+        .then(({ status, headers, text }) => {
+          assert.equal(status, 201)
+          assert.equal(headers['content-length'], '0')
+          assert.equal(text, '')
+        })
     })
 
     it('shall send string with status 401', function () {
@@ -37,33 +44,36 @@ describe('http/Response', function () {
         res.send('foobar', 401)
       })
 
-      return request(app).get('/').then(({ status, headers, text }) => {
-        assert.equal(status, 401)
-        assert.equal(headers['content-type'], 'text/plain; charset=utf-8')
-        assert.equal(text, 'foobar')
-      })
+      return request(app)
+        .get('/')
+        .then(({ status, headers, text }) => {
+          assert.equal(status, 401)
+          assert.equal(headers['content-type'], 'text/plain; charset=utf-8')
+          assert.equal(text, 'foobar')
+        })
     })
 
     it('shall send html redirect', function () {
       const app = new App()
       app.get('/', (req, res) => {
         const location = 'https://example.domain'
-        res.send(
-        `<body><a href="${location}">${location}</a></body>`,
-        301,
-        {
+        res.send(`<body><a href="${location}">${location}</a></body>`, 301, {
           Location: location,
           'Content-Type': 'text/html; charset=utf-8'
-        }
-        )
+        })
       })
 
-      return request(app).get('/').then(({ status, headers, text }) => {
-        assert.equal(status, 301)
-        assert.equal(headers['content-type'], 'text/html; charset=utf-8')
-        assert.equal(headers.location, 'https://example.domain')
-        assert.equal(text, '<body><a href="https://example.domain">https://example.domain</a></body>')
-      })
+      return request(app)
+        .get('/')
+        .then(({ status, headers, text }) => {
+          assert.equal(status, 301)
+          assert.equal(headers['content-type'], 'text/html; charset=utf-8')
+          assert.equal(headers.location, 'https://example.domain')
+          assert.equal(
+            text,
+            '<body><a href="https://example.domain">https://example.domain</a></body>'
+          )
+        })
     })
 
     it('shall send Buffer', function () {
@@ -72,11 +82,13 @@ describe('http/Response', function () {
         res.send(Buffer.from('foobar'))
       })
 
-      return request(app).get('/').then(({ status, headers, body }) => {
-        assert.equal(status, 200)
-        assert.equal(headers['content-type'], 'application/octet-stream')
-        assert.deepEqual(body, Buffer.from('foobar'))
-      })
+      return request(app)
+        .get('/')
+        .then(({ status, headers, body }) => {
+          assert.equal(status, 200)
+          assert.equal(headers['content-type'], 'application/octet-stream')
+          assert.deepEqual(body, Buffer.from('foobar'))
+        })
     })
 
     it('shall fail to send boolean', function () {
@@ -85,11 +97,16 @@ describe('http/Response', function () {
         res.send(true)
       })
 
-      return request(app).get('/').then(({ status, headers, body }) => {
-        assert.equal(status, 200)
-        assert.equal(headers['content-type'], 'application/json; charset=utf-8')
-        assert.equal(body, true)
-      })
+      return request(app)
+        .get('/')
+        .then(({ status, headers, body }) => {
+          assert.equal(status, 200)
+          assert.equal(
+            headers['content-type'],
+            'application/json; charset=utf-8'
+          )
+          assert.equal(body, true)
+        })
     })
 
     it('shall fail to send number', function () {
@@ -98,11 +115,16 @@ describe('http/Response', function () {
         res.send(42)
       })
 
-      return request(app).get('/').then(({ status, headers, body }) => {
-        assert.equal(status, 200)
-        assert.equal(headers['content-type'], 'application/json; charset=utf-8')
-        assert.equal(body, 42)
-      })
+      return request(app)
+        .get('/')
+        .then(({ status, headers, body }) => {
+          assert.equal(status, 200)
+          assert.equal(
+            headers['content-type'],
+            'application/json; charset=utf-8'
+          )
+          assert.equal(body, 42)
+        })
     })
 
     it('shall send function as empty string', function () {
@@ -111,11 +133,13 @@ describe('http/Response', function () {
         res.send(() => {})
       })
 
-      return request(app).get('/').then(({ status, headers, text }) => {
-        assert.equal(status, 200)
-        assert.equal(headers['content-type'], undefined)
-        assert.equal(text, '')
-      })
+      return request(app)
+        .get('/')
+        .then(({ status, headers, text }) => {
+          assert.equal(status, 200)
+          assert.equal(headers['content-type'], undefined)
+          assert.equal(text, '')
+        })
     })
 
     it('shall send HEAD request with empty payload', function () {
@@ -124,11 +148,13 @@ describe('http/Response', function () {
         res.send('foobar')
       })
 
-      return request(app).head('/').then(({ status, headers, text }) => {
-        assert.equal(status, 200)
-        assert.equal(headers['content-type'], 'text/plain; charset=utf-8')
-        assert.equal(text, undefined)
-      })
+      return request(app)
+        .head('/')
+        .then(({ status, headers, text }) => {
+          assert.equal(status, 200)
+          assert.equal(headers['content-type'], 'text/plain; charset=utf-8')
+          assert.equal(text, undefined)
+        })
     })
 
     it('shall set headers', function () {
@@ -137,12 +163,14 @@ describe('http/Response', function () {
         res.send('42', 200, { 'x-server': 'restana' })
       })
 
-      return request(app).get('/').then(({ status, headers, text }) => {
-        assert.equal(status, 200)
-        assert.equal(headers['content-type'], 'text/plain; charset=utf-8')
-        assert.equal(headers['x-server'], 'restana')
-        assert.equal(text, '42')
-      })
+      return request(app)
+        .get('/')
+        .then(({ status, headers, text }) => {
+          assert.equal(status, 200)
+          assert.equal(headers['content-type'], 'text/plain; charset=utf-8')
+          assert.equal(headers['x-server'], 'restana')
+          assert.equal(text, '42')
+        })
     })
 
     it('shall strip headers on 204', function () {
@@ -151,12 +179,14 @@ describe('http/Response', function () {
         res.send({ foo: 42 }, 204, { 'x-server': 'restana' })
       })
 
-      return request(app).get('/').then(({ status, headers, body }) => {
-        assert.equal(status, 204)
-        assert.equal(headers['content-type'], undefined)
-        assert.equal(headers['x-server'], 'restana')
-        assert.deepEqual(body, {})
-      })
+      return request(app)
+        .get('/')
+        .then(({ status, headers, body }) => {
+          assert.equal(status, 204)
+          assert.equal(headers['content-type'], undefined)
+          assert.equal(headers['x-server'], 'restana')
+          assert.deepEqual(body, {})
+        })
     })
   })
 })

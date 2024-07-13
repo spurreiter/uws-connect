@@ -11,7 +11,7 @@ export const CONTENT_TYPE_FORM = 'application/x-www-form-urlencoded'
  */
 const toNumber = (v, def) => {
   const n = +v
-  return isNaN(n) ? (def || v) : n
+  return isNaN(n) ? def || v : n
 }
 
 /**
@@ -24,11 +24,8 @@ const toNumber = (v, def) => {
  * @param {string} [options.type] default expected content-type
  * @returns {import('./types').BodyParserMiddleware}
  */
-export function bodyParser (options) {
-  const {
-    limit = 1e6,
-    type
-  } = options || {}
+export function bodyParser(options) {
+  const { limit = 1e6, type } = options || {}
 
   /**
    * @param {import('./types').BodyParserRequest} req
@@ -40,26 +37,27 @@ export function bodyParser (options) {
     let length = 0
 
     const contentType = type || req.headers['content-type'] || ''
-    const contentLength = Number((req.headers['content-length'] === undefined)
-      ? NaN
-      : toNumber(req.headers['content-length'], NaN)
+    const contentLength = Number(
+      req.headers['content-length'] === undefined
+        ? NaN
+        : toNumber(req.headers['content-length'], NaN)
     )
 
     const onEnd = (err) => {
       req.raw = Buffer.concat(buffer)
-      const body = req.text = req.raw.toString()
+      const body = (req.text = req.raw.toString())
 
       if (contentType.indexOf(CONTENT_TYPE_JSON) === 0) {
         try {
           req.body = JSON.parse(body)
-        } catch (/** @type {Error|any} */e) {
+        } catch (/** @type {Error|any} */ e) {
           err = new HttpError(400, 'err_json_parse', e)
         }
       } else if (contentType.indexOf(CONTENT_TYPE_FORM) === 0) {
         try {
           req.body = qs.parse(body)
           /* c8 ignore next 3 */
-        } catch (/** @type {Error|any} */e) {
+        } catch (/** @type {Error|any} */ e) {
           err = new HttpError(400, 'err_urlencoded_parse', e)
         }
       }
@@ -77,7 +75,7 @@ export function bodyParser (options) {
       return
     }
 
-    req.on('data', chunk => {
+    req.on('data', (chunk) => {
       if (length > limit) {
         return
       }

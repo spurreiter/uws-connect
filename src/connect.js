@@ -18,51 +18,53 @@ const { isAsyncFunction } = util.types
  * @param {(err: HttpError|Error|undefined|null, req: Request, res: Response) => void} [options.finalHandler]
  * @returns {(...Middleware) => (res: uWS.HttpResponse, req: uWS.HttpRequest) => void}
  */
-export const connect = (options = {}) => (...handlers) => {
-  const done = options.finalHandler
-  const protocol = options.isSsl ? 'https' : 'http'
+export const connect =
+  (options = {}) =>
+  (...handlers) => {
+    const done = options.finalHandler
+    const protocol = options.isSsl ? 'https' : 'http'
 
-  const stack = handlers
-    .flat(Infinity)
-    .filter(Boolean)
-    .map(fn => {
-      if (typeof fn !== 'function') throw new Error('need function')
-      const isAsync = isAsyncFunction(fn)
-      return [fn, isAsync]
-    })
-
-  /**
-   * @param {uWS.HttpResponse} response
-   * @param {uWS.HttpRequest} request
-   */
-  return (response, request) => {
-    // @ts-ignore
-    const req = new Request(response, request, { protocol })
-    const res = new Response(response, req)
-
-    let i = 0
+    const stack = handlers
+      .flat(Infinity)
+      .filter(Boolean)
+      .map((fn) => {
+        if (typeof fn !== 'function') throw new Error('need function')
+        const isAsync = isAsyncFunction(fn)
+        return [fn, isAsync]
+      })
 
     /**
-     * @param {Error} [err]
+     * @param {uWS.HttpResponse} response
+     * @param {uWS.HttpRequest} request
      */
-    function next (err) {
-      const [fn, isAsync] = stack[i++] || []
+    return (response, request) => {
+      // @ts-ignore
+      const req = new Request(response, request, { protocol })
+      const res = new Response(response, req)
 
-      // early abort; no support for error handlers (like with expressjs)
-      if (err || !fn) {
-        done ? done(err, req, res) : finalHandler(err, res)
-        return
-      }
-      try {
-        const p = fn(req, res, next)
-        if (isAsync || p?.then) {
-          p.then(() => next()).catch(next)
+      let i = 0
+
+      /**
+       * @param {Error} [err]
+       */
+      function next(err) {
+        const [fn, isAsync] = stack[i++] || []
+
+        // early abort; no support for error handlers (like with expressjs)
+        if (err || !fn) {
+          done ? done(err, req, res) : finalHandler(err, res)
+          return
         }
-      } catch (/** @type {Error|any} */err) {
-        done ? done(err, req, res) : finalHandler(err, res)
+        try {
+          const p = fn(req, res, next)
+          if (isAsync || p?.then) {
+            p.then(() => next()).catch(next)
+          }
+        } catch (/** @type {Error|any} */ err) {
+          done ? done(err, req, res) : finalHandler(err, res)
+        }
       }
-    }
 
-    next()
+      next()
+    }
   }
-}

@@ -93,7 +93,7 @@ export class Request extends Readable {
     return cookie.parse(this.headers.cookie || '')
   }
 
-  _read (size) {
+  _read (_size) {
     this.resume()
   }
 

@@ -2,12 +2,12 @@ import assert from 'assert/strict'
 import { connect } from '../src/connect.js'
 import { nap } from '../src/utils/nap.js'
 
-function Request () {
+function Request() {
   this.getMethod = () => 'get'
   this.forEach = () => undefined
 }
 
-function Response () {
+function Response() {
   this.onData = () => undefined
   this.onAborted = () => undefined
 }
@@ -52,7 +52,7 @@ describe('connect', function () {
         res.body.push(2)
         next()
       },
-      (req, res) => {
+      (_req, _res) => {
         throw new Error('no good')
       }
     )(new Response(), new Request())

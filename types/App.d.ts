@@ -4,7 +4,7 @@
  * @param {AppOptions} [options]
  * @returns {import('./types').App}
  */
-export function App(options?: import("./types").AppOptions | undefined): import('./types').App;
+export function App(options?: import("./types").AppOptions | undefined): import("./types").App;
 export class App {
     /** @typedef {import('./types').AppOptions} AppOptions */
     /**
@@ -30,5 +30,5 @@ export class App {
     close: (() => Promise<void>) | undefined;
     use: ((...handlers: any[]) => this) | undefined;
 }
-export type AppOptions = import('./types').AppOptions;
+export type AppOptions = import("./types").AppOptions;
 import uWS from 'uWebSockets.js';

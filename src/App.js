@@ -13,7 +13,7 @@ import { nap } from './utils/nap.js'
  * @returns {import('./types').App}
  */
 // @ts-ignore
-export function App (options) {
+export function App(options) {
   if (!(this instanceof App)) {
     // @ts-ignore
     return new App(options)
@@ -79,8 +79,18 @@ export function App (options) {
     return this
   }
 
-  const methods = ['get', 'post', 'options', 'del', 'patch', 'put', 'head',
-    'connect', 'trace', 'any']
+  const methods = [
+    'get',
+    'post',
+    'options',
+    'del',
+    'patch',
+    'put',
+    'head',
+    'connect',
+    'trace',
+    'any'
+  ]
   // @ts-ignore
   const glue = connect({ finalHandler, isSsl })
   for (const method of methods) {
@@ -90,8 +100,14 @@ export function App (options) {
     }
   }
 
-  const others = ['ws', 'publish', 'numSubscribers', 'addServerName',
-    'removeServerName', 'missingServerName']
+  const others = [
+    'ws',
+    'publish',
+    'numSubscribers',
+    'addServerName',
+    'removeServerName',
+    'missingServerName'
+  ]
   for (const method of others) {
     this[method] = (...args) => {
       app[method](...args)

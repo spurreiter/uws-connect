@@ -1,4 +1,3 @@
-/// <reference types="node" />
 export class Response extends Writable {
     /**
      * @param {uWs.HttpResponse} uwsRes
@@ -46,13 +45,13 @@ export class Response extends Writable {
      * @param {string} value
      * @param {import('cookie').CookieSerializeOptions} options
      */
-    cookie(name: string, value?: string, options?: import('cookie').CookieSerializeOptions): void;
+    cookie(name: string, value?: string, options?: import("cookie").CookieSerializeOptions): void;
     /**
      * clear cookie
      * @param {string} name
      * @param {import('cookie').CookieSerializeOptions} options
      */
-    clearCookie(name: string, options: import('cookie').CookieSerializeOptions): void;
+    clearCookie(name: string, options: import("cookie").CookieSerializeOptions): void;
     /**
      * write headers only before end or the first write
      * @private
@@ -104,10 +103,10 @@ export class Response extends Writable {
      */
     private _finish;
 }
-export type WritableOptions = import('node:stream').WritableOptions;
+export type WritableOptions = import("node:stream").WritableOptions;
 export namespace uWs {
-    type HttpRequest = import('uWebSockets.js').HttpRequest;
-    type HttpResponse = import('uWebSockets.js').HttpResponse;
+    type HttpRequest = import("uWebSockets.js").HttpRequest;
+    type HttpResponse = import("uWebSockets.js").HttpResponse;
 }
-export type Request = import('./Request.js').Request;
+export type Request = import("./Request.js").Request;
 import { Writable } from 'stream';

@@ -1,7 +1,7 @@
 import uWS from 'uWebSockets.js'
 const port = 5050
 
-const set = (item) => (res, req) => {
+const set = (item) => (res, _req) => {
   res.locals = item
 }
 const userId = (res, req) => {
@@ -15,8 +15,8 @@ const handler = (res, req) => {
 
 const app = uWS.App()
 app
-  .get('/favicon.ico', (res, req) => res.end())
-  .get('/', (res, req) => res.end('Hello'))
+  .get('/favicon.ico', (res, _req) => res.end())
+  .get('/', (res, _req) => res.end('Hello'))
   .get('/users/:id', handler)
   .listen(port, (token) => {
     if (!token) console.error('failed to start uws')

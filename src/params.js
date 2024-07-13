@@ -12,12 +12,15 @@
  * @param {string} route
  * @returns {Middleware}
  */
-export function params (route = '') {
+export function params(route = '') {
   const params = []
 
-  route.split('/')
-    .filter(p => p.indexOf(':') === 0)
-    .forEach(p => { params.push(p.substring(1)) })
+  route
+    .split('/')
+    .filter((p) => p.indexOf(':') === 0)
+    .forEach((p) => {
+      params.push(p.substring(1))
+    })
 
   return (req, res, next) => {
     req.params = {}
