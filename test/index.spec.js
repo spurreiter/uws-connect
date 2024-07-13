@@ -154,7 +154,7 @@ describe('uws-connect', function () {
     assert.deepEqual(text, '1000')
   })
 
-  it('return a number', async function () {
+  it('return a number -> undefined', async function () {
     const res = await fetch(`${url}/number/undefined`)
     const text = await res.text()
     assert.equal(res.status, 200)
