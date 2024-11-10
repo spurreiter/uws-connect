@@ -52,9 +52,9 @@ export class Request extends Readable {
     /**
      * get `uWs.HttpRequest.getParameter()`
      * @param {number} index
-     * @returns {string}
+     * @returns {string|undefined}
      */
-    getParameter(index: number): string;
+    getParameter(index: number): string | undefined;
 }
 export type ReadableOptions = import("node:stream").ReadableOptions;
 export namespace uWs {

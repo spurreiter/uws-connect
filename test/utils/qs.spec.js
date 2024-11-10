@@ -14,11 +14,15 @@ describe('utils/qs', function () {
     deepEqual(qs.parse('foo2=bar2&baz2='), { foo2: 'bar2', baz2: '' })
     deepEqual(qs.parse('foo=bar&baz'), { foo: 'bar', baz: '' })
     deepEqual(qs.parse('foo=bar&foo=baz'), { foo: ['bar', 'baz'] })
-    deepEqual(qs.parse('foo=bar&foo=baz&foo=wat'), { foo: ['bar', 'baz', 'wat'] })
-    deepEqual(
-      qs.parse('cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World'),
-      { cht: 'p3', chd: 't:60,40', chs: '250x100', chl: 'Hello|World' }
-    )
+    deepEqual(qs.parse('foo=bar&foo=baz&foo=wat'), {
+      foo: ['bar', 'baz', 'wat']
+    })
+    deepEqual(qs.parse('cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World'), {
+      cht: 'p3',
+      chd: 't:60,40',
+      chs: '250x100',
+      chl: 'Hello|World'
+    })
   })
 
   it('does not support bracket notation', function () {
@@ -37,7 +41,7 @@ describe('utils/qs', function () {
     deepEqual(qs.parse('foo=%:%}'), { foo: '%:%}' })
   })
 
-  it('doesn\'t produce empty keys', function () {
+  it("doesn't produce empty keys", function () {
     deepEqual(qs.parse('_r=1&'), { _r: '1' })
   })
 

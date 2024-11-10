@@ -3,11 +3,12 @@
  * @param {string} text
  * @returns {object} parsed object
  */
-export function parse (text) {
+export function parse(text) {
   const params = new URLSearchParams(text)
   const body = {}
   for (const [name, value] of params.entries()) {
-    if (body[name]) { // filters for empty string!
+    if (body[name]) {
+      // filters for empty string!
       Array.isArray(body[name])
         ? body[name].push(value)
         : (body[name] = [body[name], value])

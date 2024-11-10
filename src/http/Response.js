@@ -24,7 +24,7 @@ export class Response extends Writable {
    * @param {Request} req
    * @param {WritableOptions} [options]
    */
-  constructor (uwsRes, req, options) {
+  constructor(uwsRes, req, options) {
     super(options)
     this._uwsRes = uwsRes
     this._req = req
@@ -48,7 +48,7 @@ export class Response extends Writable {
    * sets response status code
    * @param {number} status
    */
-  set statusCode (status) {
+  set statusCode(status) {
     if (!isNaN(status)) {
       this._status = +status
     }
@@ -58,7 +58,7 @@ export class Response extends Writable {
    * set response status code
    * @returns {number}
    */
-  get statusCode () {
+  get statusCode() {
     return this._status
   }
 
@@ -67,7 +67,7 @@ export class Response extends Writable {
    * @param {string} key
    * @returns {any}
    */
-  getHeader (key) {
+  getHeader(key) {
     return (this._headers[key.toLowerCase()] || [])[1]
   }
 
@@ -76,7 +76,7 @@ export class Response extends Writable {
    * @param {string} key
    * @param {string|number} value
    */
-  setHeader (key, value) {
+  setHeader(key, value) {
     this._headers[key.toLowerCase()] = [key, String(value)]
   }
 
@@ -84,7 +84,7 @@ export class Response extends Writable {
    * remove response header by key
    * @param {string} key
    */
-  removeHeader (key) {
+  removeHeader(key) {
     const lc = key.toLowerCase()
     delete this._headers[lc]
   }
@@ -93,9 +93,9 @@ export class Response extends Writable {
    * set cookie
    * @param {string} name
    * @param {string} value
-   * @param {import('cookie').CookieSerializeOptions} options
+   * @param {import('cookie').SerializeOptions} options
    */
-  cookie (name, value = '', options = {}) {
+  cookie(name, value = '', options = {}) {
     const opts = { ...COOKIE_DEFAULTS, ...options }
     const setCookie = cookie.serialize(name, value, opts)
     const key = `set-cookie--${name}-${opts.path}-${opts.domain || ''}`
@@ -105,9 +105,9 @@ export class Response extends Writable {
   /**
    * clear cookie
    * @param {string} name
-   * @param {import('cookie').CookieSerializeOptions} options
+   * @param {import('cookie').SerializeOptions} options
    */
-  clearCookie (name, options) {
+  clearCookie(name, options) {
     this.cookie(name, '', { ...options, expires: new Date(0) })
   }
 
@@ -115,7 +115,7 @@ export class Response extends Writable {
    * write headers only before end or the first write
    * @private
    */
-  _writeHeaders () {
+  _writeHeaders() {
     if (this.headersSent) return
 
     this._uwsRes.cork(() => {
@@ -134,7 +134,7 @@ export class Response extends Writable {
    * @param {Buffer} chunk
    * @returns {boolean} `false` if body was not or only partly written
    */
-  _writeBackPressure (chunk) {
+  _writeBackPressure(chunk) {
     const lastOffset = this._uwsRes.getWriteOffset()
     const drain = this._uwsRes.write(chunk)
     if (!drain) {
@@ -153,7 +153,7 @@ export class Response extends Writable {
    * drained write to uWs.HttpResponse
    * @param {string|Buffer} chunk
    */
-  write (chunk) {
+  write(chunk) {
     if (this.destroyed || this.finished) return true
     this._writeHeaders()
     this._uwsRes.cork(() => {
@@ -169,7 +169,7 @@ export class Response extends Writable {
    * @param {string} encoding (ignored)
    * @param {Function} callback
    */
-  _write (chunk, encoding, callback) {
+  _write(chunk, encoding, callback) {
     const drain = this.write(chunk)
     const err = drain ? null : new Error('backpressure')
     callback(err)
@@ -182,7 +182,7 @@ export class Response extends Writable {
    * @param {boolean} [closeConnection]
    */
   // @ts-expect-error
-  end (body, closeConnection) {
+  end(body, closeConnection) {
     if (this.destroyed || this.finished) return
     this._writeHeaders()
     this._uwsRes.cork(() => {
@@ -197,7 +197,7 @@ export class Response extends Writable {
    * @param {Buffer} body
    * @returns {boolean} `false` if body was not or only partly written
    */
-  _tryEndBackPressure (body, totalLength) {
+  _tryEndBackPressure(body, totalLength) {
     const lastOffset = this._uwsRes.getWriteOffset()
     const [drain, done] = this._uwsRes.tryEnd(body, totalLength)
     if (done) {
@@ -220,7 +220,7 @@ export class Response extends Writable {
    * drained write with end to uWs.HttpResponse
    * @param {string|Buffer} body
    */
-  tryEnd (body) {
+  tryEnd(body) {
     if (this.destroyed || this.finished) return true
     this._writeHeaders()
     this._uwsRes.cork(() => {
@@ -235,7 +235,7 @@ export class Response extends Writable {
    * @param {number} [status]
    * @param {object} [headers]
    */
-  send (data, status, headers = {}) {
+  send(data, status, headers = {}) {
     // @ts-expect-error
     const chunk = data || this.body
     /** @type {Buffer|string} */
@@ -288,7 +288,7 @@ export class Response extends Writable {
   /**
    * @private
    */
-  _finish () {
+  _finish() {
     this.finished = true
     this.emit('finish')
     this.removeAllListeners()
@@ -302,7 +302,7 @@ export class Response extends Writable {
  * @param {string} type
  * @param {string|false} encoding
  */
-function setDefaultContentType (res, type, encoding = 'utf-8') {
+function setDefaultContentType(res, type, encoding = 'utf-8') {
   if (!res.getHeader(CONTENT_TYPE)) {
     const contentType = type + (encoding ? '; charset=' + encoding : '')
     res.setHeader(CONTENT_TYPE, contentType)

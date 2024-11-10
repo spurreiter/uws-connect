@@ -17,22 +17,22 @@
     "checkLeaks": true
   },
   "dependencies": {
-    "autocannon": "^7.15.0",
+    "autocannon": "^8.0.0",
     "cli-table": "^0.3.11",
-    "express": "^4.19.2",
-    "hyper-express": "^6.16.4",
+    "express": "^5.0.1",
+    "hyper-express": "^6.17.2",
     "kleur": "^4.1.5",
     "minimist": "^1.2.8",
-    "ora": "^7.0.1",
+    "ora": "^8.1.1",
     "polka": "^0.5.2",
     "restana": "^4.9.9"
   },
   "devDependencies": {
-    "mocha": "^10.6.0",
+    "mocha": "^10.8.2",
     "supertest": "^7.0.0"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=18.0.0"
   },
   "publishConfig": {
     "access": "public"

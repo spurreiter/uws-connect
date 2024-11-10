@@ -1,7 +1,7 @@
 import http from 'http'
 import https from 'https'
 
-export function fetch (url, opts) {
+export function fetch(url, opts) {
   const { protocol, hostname, port, pathname, search } = new URL(url)
   const { body, ..._opts } = opts || {}
   _opts.headers = {
@@ -17,7 +17,7 @@ export function fetch (url, opts) {
   const req = transport.request({ ..._opts, hostname, port, path })
   const then = (_resolve) =>
     new Promise((resolve, reject) => {
-      req.once('response', res => {
+      req.once('response', (res) => {
         let text = ''
         // @ts-ignore
         res.status = res.statusCode
@@ -29,7 +29,9 @@ export function fetch (url, opts) {
         res.text = async () => text
         // @ts-ignore
         res.json = async () => JSON.parse(text)
-        res.on('data', (data) => { text += data.toString() })
+        res.on('data', (data) => {
+          text += data.toString()
+        })
         res.on('error', reject)
         res.on('end', () => resolve(res))
         req.on('error', reject)

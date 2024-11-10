@@ -43,15 +43,15 @@ export class Response extends Writable {
      * set cookie
      * @param {string} name
      * @param {string} value
-     * @param {import('cookie').CookieSerializeOptions} options
+     * @param {import('cookie').SerializeOptions} options
      */
-    cookie(name: string, value?: string, options?: import("cookie").CookieSerializeOptions): void;
+    cookie(name: string, value?: string, options?: import("cookie").SerializeOptions): void;
     /**
      * clear cookie
      * @param {string} name
-     * @param {import('cookie').CookieSerializeOptions} options
+     * @param {import('cookie').SerializeOptions} options
      */
-    clearCookie(name: string, options: import("cookie").CookieSerializeOptions): void;
+    clearCookie(name: string, options: import("cookie").SerializeOptions): void;
     /**
      * write headers only before end or the first write
      * @private

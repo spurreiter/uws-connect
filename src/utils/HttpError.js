@@ -6,7 +6,7 @@ export class HttpError extends Error {
    * @param {string} [message]
    * @param {Error} [err]
    */
-  constructor (status = 500, message, err) {
+  constructor(status = 500, message, err) {
     message = message || STATUS_CODES[status] || String(status)
     super(message)
     this.name = this.constructor.name
@@ -17,9 +17,9 @@ export class HttpError extends Error {
     }
     if (typeof Error.captureStackTrace === 'function') {
       Error.captureStackTrace(this, this.constructor)
-    /* c8 ignore next 3 */
+      /* c8 ignore next 3 */
     } else {
-      this.stack = (new Error(message)).stack
+      this.stack = new Error(message).stack
     }
   }
 }

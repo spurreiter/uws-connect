@@ -11,6 +11,8 @@ const userId = (req, res, _next) => {
 const app = new HyperExpress.Server()
 
 app.get('/favicon.ico', (req, res) => res.end())
-app.get('/', (req, res) => { res.end('Hello') })
+app.get('/', (req, res) => {
+  res.end('Hello')
+})
 app.get('/users/:id', set('two'), userId)
 app.listen(5050)

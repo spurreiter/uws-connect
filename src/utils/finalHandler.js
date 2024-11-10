@@ -1,7 +1,9 @@
 /** @typedef {import('../http/Response.js').Response} Response */
 /** @typedef {import('../utils/HttpError.js').HttpError} HttpError */
 
-const isEnvDevelopment = ['development', undefined].includes(process.env.NODE_ENV)
+const isEnvDevelopment = ['development', undefined].includes(
+  process.env.NODE_ENV
+)
 
 /**
  * @param {HttpError|Error|undefined|null} err

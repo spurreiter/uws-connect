@@ -16,7 +16,7 @@ export class Request extends Readable {
    * @param {uWs.HttpRequest} uwsReq
    * @param {ReadableOptionsExt} [options]
    */
-  constructor (uwsRes, uwsReq, options = {}) {
+  constructor(uwsRes, uwsReq, options = {}) {
     // @ts-expect-error
     const { protocol = 'http', ...opts } = options
     super(opts)
@@ -35,12 +35,11 @@ export class Request extends Readable {
     this.method = this._uwsReq.getMethod().toUpperCase()
 
     this.connection = this.socket = {}
-    Object.defineProperty(this.socket, 'remoteAddress',
-      {
-        get: () => uwsRes?.getRemoteAddressAsText &&
+    Object.defineProperty(this.socket, 'remoteAddress', {
+      get: () =>
+        uwsRes?.getRemoteAddressAsText &&
         Buffer.from(uwsRes.getRemoteAddressAsText()).toString()
-      }
-    )
+    })
 
     this._uwsRes.onData((arrayBuffer, isLast) => {
       const chunk = Buffer.from(arrayBuffer)
@@ -55,11 +54,11 @@ export class Request extends Readable {
   /**
    * request url
    */
-  get url () {
+  get url() {
     return this._url || (this._url = this._uwsReq.getUrl())
   }
 
-  set url (newUrl) {
+  set url(newUrl) {
     this._url = newUrl
   }
 
@@ -70,7 +69,7 @@ export class Request extends Readable {
    *
    * @returns {object}
    */
-  get query () {
+  get query() {
     const searchParams = new URLSearchParams(this._uwsReq.getQuery())
     const query = {}
     for (const [name, value] of searchParams.entries()) {
@@ -89,18 +88,18 @@ export class Request extends Readable {
    * get parsed cookies
    * @returns {object}
    */
-  get cookies () {
+  get cookies() {
     return cookie.parse(this.headers.cookie || '')
   }
 
-  _read (_size) {
+  _read(_size) {
     this.resume()
   }
 
   /**
    * pauses stream
    */
-  pause () {
+  pause() {
     if (!this.isPaused()) {
       !this._uwsRes._ended && this._uwsRes.pause()
       super.pause()
@@ -111,7 +110,7 @@ export class Request extends Readable {
   /**
    * resumes stream
    */
-  resume () {
+  resume() {
     if (this.isPaused()) {
       super.resume()
       !this._uwsRes._ended && this._uwsRes.resume()
@@ -122,9 +121,9 @@ export class Request extends Readable {
   /**
    * get `uWs.HttpRequest.getParameter()`
    * @param {number} index
-   * @returns {string}
+   * @returns {string|undefined}
    */
-  getParameter (index) {
+  getParameter(index) {
     return this._uwsReq.getParameter(index)
   }
 }

@@ -26,9 +26,7 @@ describe('quick test', function () {
 
       it('run', function () {
         const { origin, pathname } = url
-        return supertest(origin)
-          .get(pathname)
-          .expect(200, 'User alias two')
+        return supertest(origin).get(pathname).expect(200, 'User alias two')
       })
     })
   })
