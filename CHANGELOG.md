@@ -1,3 +1,7 @@
+# 1.2.5 (2024-11-10)
+
+- chore: bump dependencies; update cookie (#b512ad5)
+
 # 1.2.4 (2024-07-13)
 
 - chore: update benchmark (#2cd517d)
