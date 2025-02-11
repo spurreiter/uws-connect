@@ -1,3 +1,7 @@
+# 1.2.6 (2025-02-11)
+
+- chore: bump dependencies (#7fbece2)
+
 # 1.2.5 (2024-11-10)
 
 - chore: bump dependencies; update cookie (#b512ad5)
