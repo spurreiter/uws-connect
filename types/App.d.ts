@@ -4,7 +4,7 @@
  * @param {AppOptions} [options]
  * @returns {import('./types').App}
  */
-export function App(options?: import("./types").AppOptions | undefined): import("./types").App;
+export function App(options?: AppOptions): import("./types").App;
 export class App {
     /** @typedef {import('./types').AppOptions} AppOptions */
     /**
@@ -12,7 +12,7 @@ export class App {
      * @param {AppOptions} [options]
      * @returns {import('./types').App}
      */
-    constructor(options?: import("./types").AppOptions | undefined);
+    constructor(options?: AppOptions);
     app: uWS.TemplatedApp | undefined;
     address: (() => {
         port: number;

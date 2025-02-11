@@ -11,7 +11,7 @@ export class Request extends Readable {
      * @param {uWs.HttpRequest} uwsReq
      * @param {ReadableOptionsExt} [options]
      */
-    constructor(uwsRes: uWs.HttpResponse, uwsReq: uWs.HttpRequest, options?: import("stream").ReadableOptions | undefined);
+    constructor(uwsRes: uWs.HttpResponse, uwsReq: uWs.HttpRequest, options?: ReadableOptionsExt);
     _uwsReq: import("uWebSockets.js").HttpRequest;
     _uwsRes: import("uWebSockets.js").HttpResponse;
     headers: {};
@@ -34,12 +34,12 @@ export class Request extends Readable {
      *
      * @returns {object}
      */
-    get query(): any;
+    get query(): object;
     /**
      * get parsed cookies
      * @returns {object}
      */
-    get cookies(): any;
+    get cookies(): object;
     _read(_size: any): void;
     /**
      * pauses stream

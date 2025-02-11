@@ -1,1 +1,1 @@
-export function nap(ms?: number | undefined): Promise<any>;
+export function nap(ms?: number): Promise<any>;

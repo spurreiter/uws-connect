@@ -4,7 +4,7 @@ export class HttpError extends Error {
      * @param {string} [message]
      * @param {Error} [err]
      */
-    constructor(status?: number | undefined, message?: string | undefined, err?: Error | undefined);
+    constructor(status?: number, message?: string, err?: Error);
     status: number;
     error: Error | undefined;
     stack: string | undefined;

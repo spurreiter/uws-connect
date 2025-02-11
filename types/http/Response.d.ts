@@ -4,7 +4,7 @@ export class Response extends Writable {
      * @param {Request} req
      * @param {WritableOptions} [options]
      */
-    constructor(uwsRes: uWs.HttpResponse, req: Request, options?: import("stream").WritableOptions | undefined);
+    constructor(uwsRes: uWs.HttpResponse, req: Request, options?: WritableOptions);
     _uwsRes: import("uWebSockets.js").HttpResponse;
     _req: import("./Request.js").Request;
     _headers: {};
@@ -80,7 +80,7 @@ export class Response extends Writable {
      * @param {string|Buffer} body
      * @param {boolean} [closeConnection]
      */
-    end(body: string | Buffer, closeConnection?: boolean | undefined): void;
+    end(body: string | Buffer, closeConnection?: boolean): void;
     /**
      * @param {Buffer} body
      * @returns {boolean} `false` if body was not or only partly written
@@ -97,7 +97,7 @@ export class Response extends Writable {
      * @param {number} [status]
      * @param {object} [headers]
      */
-    send(data: string | Buffer | object | null | boolean | number, status?: number | undefined, headers?: object): void;
+    send(data: string | Buffer | object | null | boolean | number, status?: number, headers?: object): void;
     /**
      * @private
      */
