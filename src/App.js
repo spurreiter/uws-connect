@@ -5,12 +5,12 @@ import uWS from 'uWebSockets.js'
 import { connect } from './connect.js'
 import { nap } from './utils/nap.js'
 
-/** @typedef {import('./types').AppOptions} AppOptions */
+/** @typedef {import('./types.js').AppOptions} AppOptions */
 
 /**
  * A uWs App wrapper for connect compatible middlewares
  * @param {AppOptions} [options]
- * @returns {import('./types').App}
+ * @returns {import('./types.js').App}
  */
 // @ts-ignore
 export function App(options) {

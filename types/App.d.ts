@@ -1,16 +1,16 @@
-/** @typedef {import('./types').AppOptions} AppOptions */
+/** @typedef {import('./types.js').AppOptions} AppOptions */
 /**
  * A uWs App wrapper for connect compatible middlewares
  * @param {AppOptions} [options]
- * @returns {import('./types').App}
+ * @returns {import('./types.js').App}
  */
-export function App(options?: AppOptions): import("./types").App;
+export function App(options?: AppOptions): import("./types.js").App;
 export class App {
-    /** @typedef {import('./types').AppOptions} AppOptions */
+    /** @typedef {import('./types.js').AppOptions} AppOptions */
     /**
      * A uWs App wrapper for connect compatible middlewares
      * @param {AppOptions} [options]
-     * @returns {import('./types').App}
+     * @returns {import('./types.js').App}
      */
     constructor(options?: AppOptions);
     app: uWS.TemplatedApp | undefined;
@@ -30,5 +30,5 @@ export class App {
     close: (() => Promise<void>) | undefined;
     use: ((...handlers: any[]) => this) | undefined;
 }
-export type AppOptions = import("./types").AppOptions;
+export type AppOptions = import("./types.js").AppOptions;
 import uWS from 'uWebSockets.js';

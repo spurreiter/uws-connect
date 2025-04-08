@@ -6,11 +6,11 @@
  * @param {object} [options]
  * @param {number} [options.limit=1e6] max. content-length in bytes
  * @param {string} [options.type] default expected content-type
- * @returns {import('./types').BodyParserMiddleware}
+ * @returns {import('./types.js').BodyParserMiddleware}
  */
 export function bodyParser(options?: {
     limit?: number | undefined;
     type?: string | undefined;
-}): typeof import("./types").BodyParserMiddleware;
+}): typeof import("./types.js").BodyParserMiddleware;
 export const CONTENT_TYPE_JSON: "application/json";
 export const CONTENT_TYPE_FORM: "application/x-www-form-urlencoded";

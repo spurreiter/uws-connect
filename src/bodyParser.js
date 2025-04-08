@@ -22,13 +22,13 @@ const toNumber = (v, def) => {
  * @param {object} [options]
  * @param {number} [options.limit=1e6] max. content-length in bytes
  * @param {string} [options.type] default expected content-type
- * @returns {import('./types').BodyParserMiddleware}
+ * @returns {import('./types.js').BodyParserMiddleware}
  */
 export function bodyParser(options) {
   const { limit = 1e6, type } = options || {}
 
   /**
-   * @param {import('./types').BodyParserRequest} req
+   * @param {import('./types.js').BodyParserRequest} req
    * @param {import('./http/Response').Response} res
    * @param {function} next
    */

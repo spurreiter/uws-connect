@@ -3,7 +3,7 @@
  * You may also want to consider other logger middlewares like
  * - [morgan](https://npmjs.com/package/morgan)
  * @param {object} log
- * @returns {import('./types').Middleware}
+ * @returns {import('./types.js').Middleware}
  */
 export const logRequest = (log) => (req, res, next) => {
   const start = Date.now()

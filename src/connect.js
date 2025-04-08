@@ -5,7 +5,7 @@ import { finalHandler } from './utils/finalHandler.js'
 
 const { isAsyncFunction } = util.types
 
-/** @typedef {import('./types').Middleware} Middleware */
+/** @typedef {import('./types.js').Middleware} Middleware */
 /** @typedef {import('./utils/HttpError.js').HttpError} HttpError */
 /** @typedef {import('uWebSockets.js').HttpResponse} uWS.HttpResponse */
 /** @typedef {import('uWebSockets.js').HttpRequest} uWS.HttpRequest */

@@ -1,4 +1,4 @@
-/** @typedef {import('./types').Middleware} Middleware */
+/** @typedef {import('./types.js').Middleware} Middleware */
 /**
  * achieves compatibility with express `req.params`
  * Use with care; This is much slower than the uWs method `req.getParameter(index)`.
@@ -12,4 +12,4 @@
  * @returns {Middleware}
  */
 export function params(route?: string): Middleware;
-export type Middleware = typeof import("./types").Middleware;
+export type Middleware = typeof import("./types.js").Middleware;

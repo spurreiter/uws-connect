@@ -1,4 +1,4 @@
-/** @typedef {import('./types').Middleware} Middleware */
+/** @typedef {import('./types.js').Middleware} Middleware */
 
 /**
  * achieves compatibility with express `req.params`
