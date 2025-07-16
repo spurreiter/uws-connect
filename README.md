@@ -58,17 +58,14 @@ app.get('/',
     res.end(res.body)
   }
 )
-app.put('/users/:user',
-  // get `req.params` compatibility
-  // NOTE: use the same route as the router here!
-  params('/users/:user'),
+app.put('/users/:user', // does req.params parsing like with express.
   // does json or form body parsing.
   bodyParser({ limit: 100000 }),
   (req, res) => {
     // restana like res.send method
     // res.send(data: any, status?: number, headers?: object) => void
     res.send({
-      params: req.params, // from `params()` middleware
+      params: req.params,
       body: req.body,     // from `bodyParser()` middleware
     })
   }
@@ -93,7 +90,7 @@ trade speed, use `glue(...handlers)` for connecting middlewares.
 
 ```js
 // same as `import uWs from 'uWebSockets.js'`
-import { uWS, connect } from 'uws-connect'
+import { uWS, connect, params } from 'uws-connect'
 import cors from 'cors'
 const uwsApp = uWS.App()
 
@@ -106,9 +103,10 @@ uwsApp.get('/', (response, request) => response.end('done'))
 const _cors = cors()
 const glue = connect()
 uwsApp.options('/*', glue(_cors))
-uwsApp.get('/with-cors', glue(
+uwsApp.get('/with-cors/:param', glue(
   _cors,
-  (req, res) => res.end('with cors'))
+  params('/with-cors/:param'), // must use the same path as the route
+  (req, res) => res.end(`with cors - ${req.params.param}`))
 )
 
 uwsApp.listen(9001, () => {})
@@ -125,12 +123,13 @@ $ node index.js -d 10 -c 2500 -p 4
 
 | Package     | Version | Requests/s | Latency (ms) | Throughput (Mb) |
 | :---------- | ------: | ---------: | -----------: | --------------: |
-| uws-connect |   2.1.5 |     221760 |        62.29 |           19.03 |
-| uWebSockets | 20.49.0 |     201180 |        61.07 |           20.53 |
-| native      | 22.11.0 |     103648 |        59.85 |           13.54 |
-| restana     |   4.9.9 |      99987 |        56.40 |           13.06 |
-| polka       |   0.5.2 |      97229 |        62.75 |           12.70 |
-| express     |   5.0.1 |      23198 |        94.07 |            3.03 |
+| uWebSockets | 20.52.0 |     365266 |        45.84 |           37.27 |
+| uws-connect |   1.4.0 |     225102 |        52.39 |           19.32 |
+| native      |  24.4.1 |     125107 |        44.20 |           16.34 |
+| polka       |   0.5.2 |     119533 |        44.85 |           15.62 |
+| restana     |   5.0.0 |     109485 |        60.59 |           14.31 |
+| express     |   5.1.0 |      87974 |        58.47 |           11.49 |
+
 
 # Contributing
 

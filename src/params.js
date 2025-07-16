@@ -22,7 +22,11 @@ export function params(route = '') {
       params.push(p.substring(1))
     })
 
-  return (req, res, next) => {
+  if (!params.length) {
+    return (_req, _res, next) => next()
+  }
+
+  return (req, _res, next) => {
     req.params = {}
 
     for (let i = 0; i < params.length; i++) {

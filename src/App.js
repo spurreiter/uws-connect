@@ -4,6 +4,7 @@
 import uWS from 'uWebSockets.js'
 import { connect } from './connect.js'
 import { nap } from './utils/nap.js'
+import { params } from './params.js'
 
 /** @typedef {import('./types.js').AppOptions} AppOptions */
 
@@ -95,7 +96,7 @@ export function App(options) {
   const glue = connect({ finalHandler, isSsl })
   for (const method of methods) {
     this[method] = (pattern, ...handlers) => {
-      app[method](pattern, glue(...preHandlers, ...handlers))
+      app[method](pattern, glue(params(pattern), ...preHandlers, ...handlers))
       return this
     }
   }
