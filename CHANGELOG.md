@@ -1,3 +1,8 @@
+# 1.4.0 (2025-07-16)
+
+- feat: include params parser in app route handlers (#5698285)
+- chore: bump benchmark dependencies (#5b9cbc4)
+
 # 1.3.0 (2025-07-16)
 
 - chore: engine support node >=20 <=24
