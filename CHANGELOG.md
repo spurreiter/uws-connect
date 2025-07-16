@@ -1,3 +1,10 @@
+# 1.3.0 (2025-07-16)
+
+- chore: engine support node >=20 <=24
+- chore: bump dependencies (#ceea67c)
+- chore: fix types (#b01c65e)
+- chore: bump devDependencies (#b1ad4fc)
+
 # 1.2.6 (2025-02-11)
 
 - chore: bump dependencies (#7fbece2)
