@@ -1,3 +1,7 @@
+# 1.4.1 (2025-12-24)
+
+- chore: bump dependencies (#d56d7a2)
+
 # 1.4.0 (2025-07-16)
 
 - feat: include params parser in app route handlers (#5698285)
