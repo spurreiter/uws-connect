@@ -5,16 +5,17 @@
     "checkJs": true,
     "declaration": true,
     "declarationDir": "types",
+    "emitDeclarationOnly": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "noEmitOnError": true,
     "noImplicitAny": false,
+    "rootDir": "src",
     "strict": true,
     "target": "esnext",
-    "emitDeclarationOnly": true,
-    "noEmitOnError": true
+    "types": ["node"]
   },
   "include": [
-    "src/*.js"
+    "src/**/*.js"
   ],
   "exclude": [
     "bin",
